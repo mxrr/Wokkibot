@@ -12,6 +12,7 @@ module.exports = class EditCommand extends Command {
             details: 'Edit a previous added custom command',
             examples: [`${client.commandPrefix}editc hello Hello world!!`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES'],
             args: [
                 {
                     key: 'command',

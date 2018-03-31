@@ -12,6 +12,7 @@ module.exports = class AddCommand extends Command {
             details: `Add a custom command to the guild that will be triggered by using ${client.commandPrefix}command`,
             examples: [`${client.commandPrefix}addc hello Hello world!`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES'],
             args: [
                 {
                     key: 'command',

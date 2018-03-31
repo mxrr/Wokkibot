@@ -10,7 +10,8 @@ module.exports = class TwitchCommand extends Command {
             description: 'Set channel for livestream notifications',
             details: '',
             examples: [`${client.commandPrefix}setchannel`],
-            guildOnly: true
+            guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES']
         });
     }
 

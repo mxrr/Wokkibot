@@ -12,7 +12,8 @@ module.exports = class QueueCommand extends Command {
             description: 'View current song queue',
             details: 'Displays a list of songs in the queue for the current guild',
             examples: [`${client.commandPrefix}queue`],
-            guildOnly: true
+            guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS']
         });
     }
 

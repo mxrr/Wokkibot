@@ -11,6 +11,7 @@ module.exports = class EightballCommand extends Command {
             details: 'Enter a question query for 8ball to answer to from it\'s list of answers',
             examples: [`${client.commandPrefix}8ball Is Kaepis gay?`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES'],
             args: [
                 {
                     key: 'question',

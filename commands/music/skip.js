@@ -11,7 +11,8 @@ module.exports = class SkipCommand extends Command {
             description: 'Skip currently playing song',
             details: 'Skips the song and starts playing the next song in the queue if there is any',
             examples: [`${client.commandPrefix}skip`],
-            guildOnly: true
+            guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES']
         });
     }
 

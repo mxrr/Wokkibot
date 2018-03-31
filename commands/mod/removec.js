@@ -12,6 +12,7 @@ module.exports = class RemoveCommand extends Command {
             details: 'Remove a custom command from the guild',
             examples: [`${client.commandPrefix}removec hello`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES'],
             args: [
                 {
                     key: 'command',

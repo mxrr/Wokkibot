@@ -14,9 +14,9 @@ const MySQL = require('mysql2/promise');
 const MySQLProvider = require('discord.js-commando-mysqlprovider');
 
 // Settings
-const { OWNER, TOKEN, DEVTOKEN, PREFIX, ACTIVITY, PRODUCTION,
-        HOST, USER, DB, PASS,
-        DEVHOST, DEVUSER, DEVDB, DEVPASS } = require('./config');
+const enviroinment = process.env.NODE_ENV || "DEVELOPMENT";
+const { OWNER } = require('./config');
+const { TOKEN, ACTIVITY, PREFIX, DB } = require('./config')[enviroinment];
 
 // Create commando client
 const client = new Commando.Client({
@@ -104,11 +104,11 @@ setInterval(() => {
 
 // Create MySQL connection
 MySQL.createConnection({
-    host: PRODUCTION ? HOST : DEVHOST,
-    user: PRODUCTION ? USER : DEVUSER,
-    password: PRODUCTION ? PASS : DEVPASS,
-    database: PRODUCTION ? DB : DEVDB
+    host: DB.HOST,
+    user: DB.USER,
+    password: DB.PASS,
+    database: DB.DB
 }).then((db) => {
     client.setProvider(new MySQLProvider(db));
-    client.login(PRODUCTION ? TOKEN : DEVTOKEN);
+    client.login(TOKEN);
 });

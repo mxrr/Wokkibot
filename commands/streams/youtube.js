@@ -15,6 +15,7 @@ module.exports = class TwitchCommand extends Command {
             details: '',
             examples: [`${client.commandPrefix}youtube add UCv9Edl_WbtbPeURPtFDo-uA`, `${client.commandPrefix}youtube remove UCv9Edl_WbtbPeURPtFDo-uA`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES'],
             args: [
                 {
                     key: 'method',

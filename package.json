@@ -4,7 +4,8 @@
   "description": "Discord bot",
   "main": "wokkibot.js",
   "scripts": {
-    "start": "node wokkibot.js"
+    "start": "set NODE_ENV=PRODUCTION&&node wokkibot.js",
+    "dev": "set NODE_ENV=DEVELOPMENT&&node wokkibot.js"
   },
   "author": "Wokki",
   "license": "ISC",

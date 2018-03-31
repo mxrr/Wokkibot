@@ -10,6 +10,7 @@ module.exports = class ResumeCommand extends Command {
             details: 'Resume a song if it is already paused',
             examples: [`${client.commandPrefix}resume`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES']
         });
     }
 

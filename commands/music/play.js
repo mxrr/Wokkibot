@@ -4,7 +4,7 @@ const winston = require('winston');
 const YouTube = require('simple-youtube-api');
 const ytdl = require('ytdl-core');
 
-const { VOLUME, BITRATE, GOOGLE_API_KEY } = require('../../config.json');
+const { VOLUME, GOOGLE_API_KEY } = require('../../config.json');
 
 module.exports = class PlayCommand extends Command {
     constructor(client) {
@@ -16,7 +16,7 @@ module.exports = class PlayCommand extends Command {
             details: 'Adds a song to the queue. If there are no other songs in the queue before, will start playing the song immediately. Requires you to be connected to a voice channel to play. Moving the bot while playing is not recommended, as it may bug the bot.',
             examples: [`${client.commandPrefix}play https://www.youtube.com/watch?v=4aSG_zO7KY8`],
             guildOnly: true,
-            clientPermissions: ['CONNECT', 'SPEAK'],
+            clientPermissions: ['CONNECT', 'SPEAK', 'SEND_MESSAGES', 'EMBED_LINKS'],
             args: [
                 {
                     key: 'url',
@@ -33,9 +33,11 @@ module.exports = class PlayCommand extends Command {
     async run(msg, { url }) {
         const voiceChannel = msg.member.voiceChannel;
         if (!voiceChannel) return msg.reply(`You must be connected to a voice channel to play music`);
-        const permissions = voiceChannel.permissionsFor(msg.client.user);
+        /*const permissions = voiceChannel.permissionsFor(msg.client.user);
         if (!permissions.has('CONNECT')) return msg.reply(`I don't have permission to connect to your voice channel`);
         if (!permissions.has('SPEAK')) return msg.reply(`I don't have permission to speak in your voice channel`);
+        if (!permissions.has('SEND_MESSAGES')) return;
+        if (!permissions.has('EMBED_LINKS')) return;*/
 
         if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
             const playlist = await this.youtube.getPlayList(url);

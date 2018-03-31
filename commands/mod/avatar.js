@@ -13,6 +13,7 @@ module.exports = class AvatarCommand extends Command {
             details: 'Enter a link after the command. The image must meet discords avatar requirements and formats',
             examples: [`${client.commandPrefix}avatar https://i.imgur.com/UC1tlQB.png`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
             args: [
                 {
                     key: 'url',

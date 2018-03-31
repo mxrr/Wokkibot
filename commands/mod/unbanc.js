@@ -14,6 +14,7 @@ module.exports = class UnbanCommand extends Command {
             details: 'The user must be mentioned for the first argument',
             examples: [`${client.commandPrefix}unbanc @Wokki#0001 play`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
             args: [
                 {
                     key: 'user',

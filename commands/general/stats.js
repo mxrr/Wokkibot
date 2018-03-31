@@ -15,7 +15,8 @@ module.exports = class StatsCommand extends Command {
             description: 'View bot stats',
             details: 'Display bots uptime, memory usage and list of guilds, channels and users it is listening to',
             examples: [`${client.commandPrefix}stats`],
-            guildOnly: true
+            guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS']
         });
     }
 

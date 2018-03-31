@@ -13,6 +13,7 @@ module.exports = class ActivityCommand extends Command {
             details: 'Set bots activity to given string',
             examples: [`${client.commandPrefix}activity Hello world!`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
             args: [
                 {
                     key: 'activity',

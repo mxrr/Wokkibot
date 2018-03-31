@@ -11,6 +11,7 @@ module.exports = class VolumeCommand extends Command {
             details: 'Set the current songs volume between 0% and 100%',
             examples: [`${client.commandPrefix}volume 50`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES'],
             args: [
                 {
                     key: 'volume',

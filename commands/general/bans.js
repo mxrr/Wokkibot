@@ -14,6 +14,7 @@ module.exports = class BansCommand extends Command {
             details: 'List of commands that you are banned from using, or if user mentioned after the command will display the mentioned users bans',
             examples: [`${client.commandPrefix}bans`, `${client.commandPrefix}bans @Wokki#0001`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
             args: [
                 {
                     key: 'user',

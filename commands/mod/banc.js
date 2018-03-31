@@ -14,6 +14,7 @@ module.exports = class BanCommand extends Command {
             details: 'The user string requires the user to be mentioned by using the @User#0000. Command to ban should not include the command prefix. Duration must be given in a format number+string, where the string is s for second, m for minute, h for hour, d for day, M (must be capital) for month and y for year. For permanent bans you should use 0 as the duration.',
             examples: [`${client.commandPrefix}banc @Wokki#0001 play 1M`, `${client.commandPrefix}banc @Wokki#0001 play 7d`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
             args: [
                 {
                     key: 'user',

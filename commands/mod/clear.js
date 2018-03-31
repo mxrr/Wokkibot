@@ -13,7 +13,7 @@ module.exports = class ClearCommand extends Command {
             details: 'Delete number of messages from the channel the message was posted in',
             examples: [`${client.commandPrefix}clear 10`],
             guildOnly: true,
-            clientPermissions: ['MANAGE_MESSAGES'],
+            clientPermissions: ['MANAGE_MESSAGES', 'SEND_MESSAGES', 'EMBED_LINKS'],
             userPermissions: ['MANAGE_MESSAGES'],
             args: [
                 {

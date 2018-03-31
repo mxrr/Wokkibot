@@ -10,7 +10,7 @@ module.exports = class DisconnectCommand extends Command {
             description: 'Force disconnect bot from any voice channel in a guild',
             details: 'Command should only be used if the bot is malfunctioning and refusing to leave the channel after ending a playlist. Should not be used as an replacement for skip command',
             examples: [`${client.commandPrefix}disconnect`],
-            guildOnly: true,
+            guildOnly: true
         });
     }
 

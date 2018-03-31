@@ -10,6 +10,7 @@ module.exports = class PauseCommand extends Command {
             details: 'Pause the currently playing song and resume it by using the resume command',
             examples: [`${client.commandPrefix}pause`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES']
         });
     }
 
