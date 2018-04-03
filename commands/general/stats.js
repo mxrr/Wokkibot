@@ -9,7 +9,7 @@ module.exports = class StatsCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'stats',
-            aliases: ['statistics', ''],
+            aliases: ['statistics'],
             group: 'general',
             memberName: 'stats',
             description: 'View bot stats',
