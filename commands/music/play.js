@@ -33,11 +33,11 @@ module.exports = class PlayCommand extends Command {
     async run(msg, { url }) {
         const voiceChannel = msg.member.voiceChannel;
         if (!voiceChannel) return msg.reply(`You must be connected to a voice channel to play music`);
-        /*const permissions = voiceChannel.permissionsFor(msg.client.user);
+        const permissions = voiceChannel.permissionsFor(msg.client.user);
         if (!permissions.has('CONNECT')) return msg.reply(`I don't have permission to connect to your voice channel`);
         if (!permissions.has('SPEAK')) return msg.reply(`I don't have permission to speak in your voice channel`);
-        if (!permissions.has('SEND_MESSAGES')) return;
-        if (!permissions.has('EMBED_LINKS')) return;*/
+        if (!permissions.has('SEND_MESSAGES')) return msg.author.send(`I don't have permissions to send messages in your channel. If you're the Administrator, give Wokkibot permissions to send messages.`);
+        if (!permissions.has('EMBED_LINKS')) return msg.reply(`I don't have permissions to embed links`);
 
         if (url.match(/^https?:\/\/(www.youtube.com|youtube.com)\/playlist(.*)$/)) {
             const playlist = await this.youtube.getPlayList(url);
