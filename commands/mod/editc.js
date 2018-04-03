@@ -6,6 +6,7 @@ module.exports = class EditCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'editc',
+            aliases: ['editcommand'],
             group: 'mod',
             memberName: 'editc',
             description: 'Edit a command',

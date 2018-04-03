@@ -8,6 +8,7 @@ module.exports = class UnbanCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'unbanc',
+            aliases: ['unbancommand'],
             group: 'mod',
             memberName: 'unbanc',
             description: 'Unban user from using a command',

@@ -6,6 +6,7 @@ module.exports = class RemoveCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'removec',
+            aliases: ['removecommand'],
             group: 'mod',
             memberName: 'removec',
             description: 'Remove a command from the guild',

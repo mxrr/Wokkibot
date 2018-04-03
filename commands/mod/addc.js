@@ -6,6 +6,7 @@ module.exports = class AddCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'addc',
+            aliases: ['addcommand'],
             group: 'mod',
             memberName: 'addc',
             description: 'Add a command to the guild',
