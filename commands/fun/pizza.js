@@ -12,6 +12,7 @@ module.exports = class PizzaCommand extends Command {
             details: 'Get random pizza toppings from an array of toppings in random order. Maximum toppings is the amount of toppings in the array. If there are more than 50 toppings in the array, toppings will be split into several messages.',
             examples: [`${client.commandPrefix}pizza 4`],
             guildOnly: true,
+            clientPermissions: ['SEND_MESSAGES'],
             args: [
                 {
                     key: 'numToppings',
@@ -23,7 +24,7 @@ module.exports = class PizzaCommand extends Command {
     }
 
     async run(msg, { numToppings }) {
-        if (numToppings === 0) return msg.reply(`Tee sudoku homo. Tai tilaa pizzas ilman täytteitä.`);
+        if (numToppings <= 0) return msg.reply(`Tee sudoku homo. Tai tilaa pizzas ilman täytteitä.`);
 
         let toppings = [
             "kinkku", "kebab", "ananas", "salami", "pepperoni", "aurajuusto", "herkkusieni",
