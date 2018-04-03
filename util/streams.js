@@ -7,6 +7,8 @@ const _ = require('lodash');
 const { TWITCH_CLIENT_ID, GOOGLE_API_KEY } = require('../config');
 
 exports.checkTwitch = async function(client) {
+    if (TWITCH_CLIENT_ID === "") return winston.error(`Tried to check twitch channels but Twitch API key is not defined`);
+
     let sentTwitchStreams = client.provider.get("global", "twitchSent", []);
     let streamsList = client.provider.get("global", "twitch", []);
 
@@ -60,6 +62,8 @@ exports.checkTwitch = async function(client) {
 }
 
 exports.checkYoutube = async function(client) {
+    if (GOOGLE_API_KEY === "") return winston.error(`Tried to check youtube channels but Google API key is not defined`);
+
     let sentYoutubeStreams = client.provider.get("global", "youtubeSent", []);
     let streamsList = client.provider.get("global", "youtube", []);
 
