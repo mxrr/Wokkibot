@@ -36,7 +36,7 @@ module.exports = class TwitchCommand extends Command {
         target = target.toLowerCase();
         method = method.toLowerCase();
 
-        if (!this.client.provider.get(msg.guild.id, "notifications")) return msg.channel.send(`Please use the ${this.client.commandPrefix}setchanel command first to set the notification channel.`);
+        if (!this.client.provider.get(msg.guild.id, "notifications")) return msg.channel.send(`Please use the **${this.client.commandPrefix}setchanel** command first to set the notification channel.`);
 
         if (method === "add" || method === "remove" || method === "list") {
             let list = this.client.provider.get("global", "twitch", []);

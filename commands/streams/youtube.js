@@ -5,7 +5,7 @@ const request = require('request');
 
 const { TWITCH_CLIENT_ID, GOOGLE_API_KEY } = require('../../config.json');
 
-module.exports = class TwitchCommand extends Command {
+module.exports = class YoutubehCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'youtube',
@@ -35,7 +35,7 @@ module.exports = class TwitchCommand extends Command {
     async run(msg, { method, target }) {
         method = method.toLowerCase();
 
-        if (!this.client.provider.get(msg.guild.id, "notifications")) return msg.channel.send(`Please use the ${this.client.commandPrefix}setchanel command first to set the notification channel.`);
+        if (!this.client.provider.get(msg.guild.id, "notifications")) return msg.channel.send(`Please use the **${this.client.commandPrefix}setchanel** command first to set the notification channel.`);
 
         if (method === "add" || method === "remove" || method === "list") {
             let list = this.client.provider.get("global", "youtube", []);
