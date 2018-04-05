@@ -20,7 +20,7 @@ const { TOKEN, ACTIVITY, ACTIVITY_TYPE, PREFIX, DB } = require('./config')[envir
 
 // Create commando client
 const client = new Commando.Client({
-    owner: OWNERS.split(','),
+    owner: OWNERS.join(','),
     commandPrefix: PREFIX,
     unknownCommandResponse: false
 });
