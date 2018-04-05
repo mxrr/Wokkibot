@@ -1,5 +1,5 @@
 {
-    "OWNER": "",
+    "OWNERS": ["1", "2"],
     "TWITCH_CLIENT_ID": "",
     "GOOGLE_API_KEY": "",
     "VOLUME": 1,
