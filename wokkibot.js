@@ -15,12 +15,12 @@ const MySQLProvider = require('discord.js-commando-mysqlprovider');
 
 // Settings
 const enviroinment = process.env.NODE_ENV || "DEVELOPMENT";
-const { OWNERS } = require('./config');
+const { OWNER } = require('./config');
 const { TOKEN, ACTIVITY, ACTIVITY_TYPE, PREFIX, DB } = require('./config')[enviroinment];
 
 // Create commando client
 const client = new Commando.Client({
-    owner: OWNERS.join(','),
+    owner: OWNER,
     commandPrefix: PREFIX,
     unknownCommandResponse: false
 });
