@@ -1,7 +1,7 @@
 const { Command } = require('discord.js-commando');
 const winston = require('winston');
 
-module.exports = class TwitchCommand extends Command {
+module.exports = class SetChannelCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'setchannel',
