@@ -16,11 +16,11 @@ const MySQLProvider = require('discord.js-commando-mysqlprovider');
 // Settings
 const enviroinment = process.env.NODE_ENV || "DEVELOPMENT";
 const { OWNER } = require('./config');
-const { TOKEN, ACTIVITY, PREFIX, DB } = require('./config')[enviroinment];
+const { TOKEN, ACTIVITY, ACTIVITY_TYPE, PREFIX, DB } = require('./config')[enviroinment];
 
 // Create commando client
 const client = new Commando.Client({
-    owner: OWNER,
+    owner: OWNERS.split(','),
     commandPrefix: PREFIX,
     unknownCommandResponse: false
 });
@@ -48,7 +48,7 @@ client.dispatcher
 
 // Client listeners
 client.once('ready', () => {
-        client.user.setActivity(ACTIVITY);
+        client.user.setActivity(ACTIVITY, { type: ACTIVITY_TYPE });
     })
     .on('ready', () => {
         winston.info(`Wokkibot is ready`);
