@@ -136,9 +136,10 @@ module.exports = class PlayCommand extends Command {
             return;
         }
 
-        const dispatcher = queue.connection.play(ytdl(song.url))
+        const dispatcher = await queue.connection.play(ytdl(song.url))
             .on('end', reason => {
                 if (reason === 'Stream is not generating quickly enough.') winston.info(`Stream ended`);
+                else if (reason === "") winston.info(`Stream ended without a reason, likely skip or song ended`); // Reason is blank due to issue with discord.js and ytdl, so if it's blank (like it is always now) display this reason
                 else winston.info(reason);
                 queue.songs.shift();
                 this.play(guild, queue.songs[0]);
