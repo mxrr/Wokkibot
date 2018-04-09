@@ -16,24 +16,32 @@ module.exports = class ActivityCommand extends Command {
             clientPermissions: ['SEND_MESSAGES', 'EMBED_LINKS'],
             args: [
                 {
+                    key: 'type',
+                    prompt: 'PLAYING, STREAMING, LISTENING or WATCHING',
+                    type: 'string'
+                },
+                {
                     key: 'activity',
                     prompt: 'What is my activity?',
                     type: 'string'
                 }
             ]
         });
+
+        const enviroinment = process.env.NODE_ENV || "DEVELOPMENT";
     }
 
     hasPermission(msg) {
         return this.client.isOwner(msg.author);
     }
 
-    run(msg, { activity }) {
+    run(msg, { activity, type }) {
         const resultEmbed = new MessageEmbed();
 
-        msg.client.user.setActivity(activity);
-        let config = require('../../config.json');
+        msg.client.user.setActivity(activity, { type: type });
+        let config = require('../../config.json')[this.enviroinment];
         config.ACTIVITY = activity;
+        config.ACTIVITY_TYPE = type;
         fs.writeFile('./config.json', JSON.stringify(config, null, 2), function(error) {
             if (error) {
                 resultEmbed
