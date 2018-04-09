@@ -30,7 +30,15 @@ module.exports = class AddCommand extends Command {
     }
 
     hasPermission(msg) {
-        if (msg.author === msg.guild.owner.user) return true;
+        const adminRole = this.client.provider.get(msg.guild.id, "adminRole");
+        if (adminRole) {
+            if (msg.member.roles.find('id', adminRole)) return true;
+            else return false;
+        }
+        else {
+            if (msg.author === msg.guild.owner.user) return true;
+            else return this.client.isOwner(msg.author);
+        }
     }
 
     async run(msg, { command, output }) {
