@@ -67,7 +67,7 @@ exports.checkYoutube = async function(client) {
     let sentYoutubeStreams = client.provider.get("global", "youtubeSent", []);
     let streamsList = client.provider.get("global", "youtube", []);
 
-    await _.each(streamsList, stream => {
+    _.each(streamsList, stream => {
         request({
             uri: `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${stream.id}&type=video&eventType=live&key=${GOOGLE_API_KEY}`,
             method: 'GET'
