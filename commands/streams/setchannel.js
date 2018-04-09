@@ -15,8 +15,20 @@ module.exports = class SetChannelCommand extends Command {
         });
     }
 
-    async run(msg, { channel }) {
-        this.client.provider.set(msg.guild.id, "notifications", msg.channel.id);
-        msg.channel.send(`Notification channel set to **${msg.channel.name}**`);
+    hasPermission(msg) {
+        const adminRole = this.client.provider.get(msg.guild.id, "adminRole");
+        if (adminRole) {
+            if (msg.member.roles.find('id', adminRole)) return true;
+            else return false;
+        }
+        else {
+            if (msg.author === msg.guild.owner.user) return true;
+            else return this.client.isOwner(msg.author);
+        }
+    }
+
+    run(msg, { channel }) {
+        this.client.provider.set(msg.guild.id, "streamsChannel", msg.channel.id);
+        msg.channel.send(`Streams channel set to **${msg.channel.name}**`);
     }
 }

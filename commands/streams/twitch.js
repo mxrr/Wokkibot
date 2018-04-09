@@ -32,14 +32,26 @@ module.exports = class TwitchCommand extends Command {
         });
     }
 
+    hasPermission(msg) {
+        const adminRole = this.client.provider.get(msg.guild.id, "adminRole");
+        if (adminRole) {
+            if (msg.member.roles.find('id', adminRole)) return true;
+            else return false;
+        }
+        else {
+            if (msg.author === msg.guild.owner.user) return true;
+            else return this.client.isOwner(msg.author);
+        }
+    }
+
     async run(msg, { method, target }) {
         target = target.toLowerCase();
         method = method.toLowerCase();
 
-        if (!this.client.provider.get(msg.guild.id, "notifications")) return msg.channel.send(`Please use the **${this.client.commandPrefix}setchanel** command first to set the notification channel.`);
+        if (!this.client.provider.get(msg.guild.id, "streamsChannel")) return msg.channel.send(`Please use the **${this.client.commandPrefix}setchanel** command first to set the notification channel.`);
 
         if (method === "add" || method === "remove" || method === "list") {
-            let list = this.client.provider.get("global", "twitch", []);
+            let list = this.client.provider.get(msg.guild.id, "twitch", []);
 
             if (method === "add") {
                 if (target === "") return msg.channel.send(`You must specify a name of the channel`);
@@ -67,7 +79,7 @@ module.exports = class TwitchCommand extends Command {
                             };
                             list.push(user);
                         }
-                        return [this.client.provider.set("global", "twitch", list),message.edit(`Succesfully subscribed to receive notifications of channel **${target}**!`)];
+                        return [this.client.provider.set(msg.guild.id, "twitch", list),message.edit(`Succesfully subscribed to receive notifications of channel **${target}**!`)];
                     });
                 });
             }
@@ -78,7 +90,7 @@ module.exports = class TwitchCommand extends Command {
                     if (user) {
                         _.pull(user.guilds, msg.guild.id);
                         if (user.guilds.length === 0) _.remove(list, { "user": target });
-                        return [this.client.provider.set("global", "twitch", list),message.edit(`Succesfully removed **${target}** from this servers subscriptions`)];
+                        return [this.client.provider.set(msg.guild.id, "twitch", list),message.edit(`Succesfully removed **${target}** from this servers subscriptions`)];
                     }
                     else {
                         return message.edit(`Could not find **${target}** in the servers subscriptions`);

@@ -32,13 +32,25 @@ module.exports = class YoutubehCommand extends Command {
         });
     }
 
+    hasPermission(msg) {
+        const adminRole = this.client.provider.get(msg.guild.id, "adminRole");
+        if (adminRole) {
+            if (msg.member.roles.find('id', adminRole)) return true;
+            else return false;
+        }
+        else {
+            if (msg.author === msg.guild.owner.user) return true;
+            else return this.client.isOwner(msg.author);
+        }
+    }
+
     async run(msg, { method, target }) {
         method = method.toLowerCase();
 
-        if (!this.client.provider.get(msg.guild.id, "notifications")) return msg.channel.send(`Please use the **${this.client.commandPrefix}setchanel** command first to set the notification channel.`);
+        if (!this.client.provider.get(msg.guild.id, "streamsChannel")) return msg.channel.send(`Please use the **${this.client.commandPrefix}setchanel** command first to set the notification channel.`);
 
         if (method === "add" || method === "remove" || method === "list") {
-            let list = this.client.provider.get("global", "youtube", []);
+            let list = this.client.provider.get(msg.guild.id, "youtube", []);
 
             if (method === "add") {
                 if (target === "") return msg.channel.send(`You must specify a name of the channel`);
@@ -64,7 +76,7 @@ module.exports = class YoutubehCommand extends Command {
                             };
                             list.push(user);
                         }
-                        return [this.client.provider.set("global", "youtube", list),message.edit(`Succesfully subscribed to receive notifications of channel **${result.snippet.title}**!`)];
+                        return [this.client.provider.set(msg.guild.id, "youtube", list),message.edit(`Succesfully subscribed to receive notifications of channel **${result.snippet.title}**!`)];
                     });
                 });
             }
@@ -75,14 +87,14 @@ module.exports = class YoutubehCommand extends Command {
                     if (user) {
                         _.pull(user.guilds, msg.guild.id);
                         if (user.guilds.length === 0) _.remove(list, { "id": target });
-                        return [this.client.provider.set("global", "youtube", list),message.edit(`Succesfully removed **${target}** from this servers subscriptions`)];
+                        return [this.client.provider.set(msg.guild.id, "youtube", list),message.edit(`Succesfully removed **${target}** from this servers subscriptions`)];
                     }
                     else {
                         user = _.find(list, { "user": target });
                         if (user) {
                             _.pull(user.guilds, msg.guild.id);
                             if (user.guilds.length === 0) _.remove(list, { "user": target });
-                            return [this.client.provider.set("global", "youtube", list),message.edit(`Succesfully removed **${target}** from this servers subscriptions`)];
+                            return [this.client.provider.set(msg.guild.id, "youtube", list),message.edit(`Succesfully removed **${target}** from this servers subscriptions`)];
                         }
                         return message.edit(`Could not find **${target}** in the servers subscriptions`);
                     }
