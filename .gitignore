@@ -64,3 +64,4 @@ typings/
 config.json
 invite.txt
 package-lock.json
+settings.sqlite3
