@@ -6,11 +6,13 @@
     "DEVELOPMENT": {
         "TOKEN": "",
         "ACTIVITY": "",
+        "ACTIVITY_TYPE": "",
         "PREFIX": ""
     },
     "PRODUCTION": {
         "TOKEN": "",
         "ACTIVITY": "",
+        "ACTIVITY_TYPE": "",
         "PREFIX": ""
     }
 }
