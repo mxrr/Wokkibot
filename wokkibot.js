@@ -6,17 +6,11 @@ const moment = require('moment');
 const _ = require('lodash');
 const request = require('request');
 
-// Stream notifications
-const streams = require('./util/streams.js');
-
-// MySQL
-const MySQL = require('mysql2/promise');
-const MySQLProvider = require('discord.js-commando-mysqlprovider');
-
 // Settings
 const enviroinment = process.env.NODE_ENV || "DEVELOPMENT";
+winston.info(`Running in ${enviroinment} enviroinment`);
 const { OWNER } = require('./config');
-const { TOKEN, ACTIVITY, ACTIVITY_TYPE, PREFIX, DB } = require('./config')[enviroinment];
+const { TOKEN, ACTIVITY, ACTIVITY_TYPE, PREFIX } = require('./config')[enviroinment];
 
 // Create commando client
 const client = new Commando.Client({
@@ -47,12 +41,8 @@ client.dispatcher
     });
 
 // Client listeners
-client.once('ready', () => {
-        client.user.setActivity(ACTIVITY, { type: ACTIVITY_TYPE });
-    })
-    .on('ready', () => {
-        winston.info(`Wokkibot is ready`);
-    })
+client.once('ready', () => client.user.setActivity(ACTIVITY, { type: ACTIVITY_TYPE }))
+    .on('ready', () => winston.info(`Wokkibot is ready`))
     .on('error', winston.error)
     .on('warn', winston.warn)
     .on('message', msg => {
@@ -68,12 +58,8 @@ client.once('ready', () => {
     })
     .on('disconnect', () => winston.warn(`Disconnected`))
     .on('reconnect', () => winston.warn(`Reconnected`))
-    .on('commandRun', (cmd, promise, msg, args) => {
-        winston.info(`User ${msg.author.tag} (${msg.author.id}) ran command ${cmd.memberName}`);
-    })
-    .on('commandError', (cmd, err) => {
-        winston.error(`Error in command ${cmd.groupID}:${cmd.memberName}`, err);
-    });
+    .on('commandRun', (cmd, promise, msg, args) =>  winston.info(`User ${msg.author.tag} (${msg.author.id}) ran command ${cmd.memberName}`))
+    .on('commandError', (cmd, err) => winston.error(`Error in command ${cmd.groupID}:${cmd.memberName}`, err));
 
 client.registry
     // Registers your custom command groups
@@ -81,8 +67,7 @@ client.registry
         ['fun', 'Fun commands'],
         ['mod', 'Moderation commands'],
         ['music', 'Music commands'],
-        ['general', 'General commands'],
-        ['streams', 'Stream nofitication related commands']
+        ['general', 'General commands']
     ])
 
     // Registers all built-in groups, commands, and argument types
@@ -91,24 +76,8 @@ client.registry
     // Registers all of your commands in the ./commands/ directory
     .registerCommandsIn(path.join(__dirname, 'commands'));
 
-// Send requests to twitch and youtube every 2 minutes to check if channels are live
-setInterval(() => {
-    streams.checkTwitch(client);
-    streams.checkYoutube(client);
-}, 120000);
+client.setProvider(
+    sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => new Commando.SQLiteProvider(db))
+).catch(winson.error);
 
-// Run clearOldIds function every day to check for stream ID's that were sent > 2 days ago
-setInterval(() => {
-    streams.clearOldIds();
-}, 86400000);
-
-// Create MySQL connection
-MySQL.createConnection({
-    host: DB.HOST,
-    user: DB.USER,
-    password: DB.PASS,
-    database: DB.DB
-}).then((db) => {
-    client.setProvider(new MySQLProvider(db));
-    client.login(TOKEN);
-});
+client.login(TOKEN);
