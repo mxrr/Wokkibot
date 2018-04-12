@@ -6,23 +6,11 @@
     "DEVELOPMENT": {
         "TOKEN": "",
         "ACTIVITY": "",
-        "PREFIX": "",
-        "DB": {
-            "HOST": "",
-            "USER": "",
-            "DB": "",
-            "PASS": ""
-        }
+        "PREFIX": ""
     },
     "PRODUCTION": {
         "TOKEN": "",
         "ACTIVITY": "",
-        "PREFIX": "",
-        "DB": {
-            "HOST": "",
-            "USER": "",
-            "DB": "",
-            "PASS": ""
-        }
+        "PREFIX": ""
     }
 }
