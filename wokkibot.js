@@ -5,6 +5,7 @@ const winston = require('winston');
 const moment = require('moment');
 const _ = require('lodash');
 const request = require('request');
+const sqlite = require('sqlite');
 
 // Settings
 const enviroinment = process.env.NODE_ENV || "DEVELOPMENT";
@@ -78,6 +79,6 @@ client.registry
 
 client.setProvider(
     sqlite.open(path.join(__dirname, 'settings.sqlite3')).then(db => new Commando.SQLiteProvider(db))
-).catch(winson.error);
+).catch(winston.error);
 
 client.login(TOKEN);
