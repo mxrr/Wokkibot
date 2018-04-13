@@ -26,12 +26,7 @@ module.exports = class PizzaCommand extends Command {
     async run(msg, { numToppings }) {
         if (numToppings <= 0) return msg.reply(`Tee sudoku homo. Tai tilaa pizzas ilman täytteitä.`);
 
-        let toppings = [
-            "kinkku", "kebab", "ananas", "salami", "pepperoni", "aurajuusto", "herkkusieni",
-            "fetajuusto", "tuplajuusto", "smetana", "BBQ-kastike", "simpukka", "anjovis",
-            "oliivi", "sipuli", "paprika", "tonnikala", "mozzarellajuusto", "jauheliha",
-            "tomaatti", "kananmuna", "kana", "katkarapu", "jalapeno", "pekoni"
-        ];
+        let toppings = this.client.provider.get(msg.guild.id, "pizzaToppings", []);
 
         if (numToppings > toppings.length) numToppings = toppings.length;
 
