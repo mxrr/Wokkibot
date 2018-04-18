@@ -8,7 +8,7 @@ const request = require('request');
 const sqlite = require('sqlite');
 
 // Settings
-const enviroinment = process.env.NODE_ENV || "DEVELOPMENT";
+const enviroinment = process.env.NODE_ENV;
 winston.info(`Running in ${enviroinment} enviroinment`);
 const { OWNER } = require('./config');
 const { TOKEN, ACTIVITY, ACTIVITY_TYPE, PREFIX } = require('./config')[enviroinment];
