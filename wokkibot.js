@@ -42,8 +42,11 @@ client.dispatcher
     });
 
 // Client listeners
-client.once('ready', () => client.user.setActivity(ACTIVITY, { type: ACTIVITY_TYPE }))
-    .on('ready', () => winston.info(`Wokkibot is ready`))
+client
+    .on('ready', () => {
+        winston.info(`Wokkibot is ready`);
+        client.user.setActivity(ACTIVITY, { type: ACTIVITY_TYPE });
+    })
     .on('error', winston.error)
     .on('warn', winston.warn)
     .on('message', msg => {
