@@ -27,6 +27,8 @@ module.exports = class BitrateCommand extends Command {
 
     run(msg, { value }) {
         const queue = this.queue.get(msg.guild.id);
+        if (value > 96) value = 96;
+        if (value < 0) value = 0;
         if (!value) return msg.reply(`You must specify a value`);
         if (!queue) return msg.reply(`There is no song playing`);
         if (!queue.connection.dispatcher) return msg.reply(`Can't set bitrate before the song has started`);
