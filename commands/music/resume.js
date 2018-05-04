@@ -17,12 +17,12 @@ module.exports = class ResumeCommand extends Command {
     run(msg) {
         const queue = this.queue.get(msg.guild.id);
         if (!queue) return msg.reply(`The song is not paused`);
-        if (!queue.songs[0].dispatcher) {
-            return msg.reply(`The song has not yet begun`);
+        if (!queue.connection.dispatcher) {
+            return msg.reply(`Song can not be resumed before it has started`);
         }
-        if (queue.songs[0].playing) return msg.reply(`The song is currently playing. Use !pause instead.`);
-        queue.songs[0].dispatcher.resume();
-        queue.songs[0].playing = true;
+        if (queue.connection.playing) return msg.reply(`The song is currently playing. Use pause instead.`);
+        queue.connection.dispatcher.resume();
+        queue.connection.playing = true;
 
         return msg.reply(`Song resumed`);
     }

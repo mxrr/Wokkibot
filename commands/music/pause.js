@@ -16,11 +16,12 @@ module.exports = class PauseCommand extends Command {
 
     run(msg) {
         const queue = this.queue.get(msg.guild.id);
-        if (!queue) return msg.reply(`There is no song playing`);
-        if (!queue.songs[0].dispatcher) return msg.reply(`The song has not even begun yet`);
-        if (!queue.songs[0].playing) return msg.reply(`The song is already paused. Use !resume instead.`);
-        queue.songs[0].dispatcher.pause();
-        queue.songs[0].playing = false;
+        if (!msg.member.voiceChannel) return msg.reply(`You must be in a voice channel to pause a song`);
+        if (!queue) return msg.channel.send(`There is nothing playing to pause`);
+        if (!queue.connection.dispatcher) return msg.reply(`Song can not be paused before it has started`);
+        if (!queue.connection.playing) return msg.reply(`The song is already paused. Use resume it instead.`);
+        queue.connection.dispatcher.pause();
+        queue.connection.playing = false;
 
         return msg.reply(`Song paused. Use !resume to resume.`);
     }
