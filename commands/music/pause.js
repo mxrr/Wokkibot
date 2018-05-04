@@ -1,4 +1,5 @@
 const { Command } = require('discord.js-commando');
+const winston = require('winston');
 
 module.exports = class PauseCommand extends Command {
     constructor(client) {
@@ -18,12 +19,12 @@ module.exports = class PauseCommand extends Command {
         const queue = this.queue.get(msg.guild.id);
         if (!msg.member.voiceChannel) return msg.reply(`You must be in a voice channel to pause a song`);
         if (!queue) return msg.channel.send(`There is nothing playing to pause`);
-        if (!queue.connection.dispatcher) return msg.reply(`Song can not be paused before it has started`);
-        if (!queue.connection.playing) return msg.reply(`The song is already paused. Use resume it instead.`);
-        queue.connection.dispatcher.pause();
-        queue.connection.playing = false;
+        if (!queue.connection.dispatcher || !queue.connection.speaking) return msg.reply(`Song can not be paused before it has started`);
 
-        return msg.reply(`Song paused. Use !resume to resume.`);
+        if (queue.connection.dispatcher.paused) return msg.reply(`The song is already paused. Use resume instead.`);
+        else queue.connection.dispatcher.pause();
+
+        return msg.reply(`Song paused`);
     }
 
     get queue() {
