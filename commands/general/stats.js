@@ -20,15 +20,15 @@ module.exports = class StatsCommand extends Command {
         });
     }
 
-    async run(msg) {
+    run(msg) {
         const statsEmbed = new MessageEmbed()
             .setColor('#ffa500')
             .setDescription('**Wokkibot Stats**')
-            .addField('❯ Uptime', moment.duration(this.client.uptime).format('d[ days], h[ hours], m[ minutes, and ]s[ seconds]'), true)
-            .addField('❯ Memory usage', `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`, true)
-            .addField('❯ Spying on', stripIndents`• Guilds: ${this.client.guilds.size}\n• Channels: ${this.client.channels.size}\n• Users: ${this.client.guilds.map(guild => guild.memberCount).reduce((a, b) => a + b)}`, true)
+            .addField(`❯ Uptime`, moment.duration(this.client.uptime).format('d[ days], h[ hours], m[ minutes, and ]s[ seconds]'), true)
+            .addField(`❯ Memory usage`, `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`, true)
+            .addField(`❯ Spying on`, stripIndents`• Guilds: ${this.client.guilds.size}\n• Channels: ${this.client.channels.size}\n• Users: ${this.client.guilds.map(guild => guild.memberCount).reduce((a, b) => a + b)}`, true)
             .setThumbnail(this.client.user.displayAvatarURL({ format: 'png' }));
-        
+
         msg.channel.send(statsEmbed);
     }
 
