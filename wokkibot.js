@@ -8,10 +8,10 @@ const request = require('request');
 const sqlite = require('sqlite');
 
 // Settings
-const enviroinment = process.env.NODE_ENV;
-winston.info(`Running in ${enviroinment} enviroinment`);
+const environment = process.env.NODE_ENV;
+winston.info(`Running in ${environment} environment`);
 const { OWNER } = require('./config');
-const { TOKEN, ACTIVITY, ACTIVITY_TYPE, PREFIX } = require('./config')[enviroinment];
+const { TOKEN, ACTIVITY, ACTIVITY_TYPE, PREFIX } = require('./config')[environment];
 
 // Create commando client
 const client = new Commando.Client({
