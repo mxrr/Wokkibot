@@ -28,6 +28,8 @@ module.exports = class PizzaCommand extends Command {
 
         let toppings = this.client.provider.get(msg.guild.id, "pizzaToppings", []);
 
+        if (!toppings || toppings.length === 0) return msg.channel.send(`There are no toppings defined. Use !toppings command to add toppings.`);
+
         if (numToppings > toppings.length) numToppings = toppings.length;
 
         let setti = await [];
