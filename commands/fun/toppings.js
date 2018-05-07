@@ -33,6 +33,12 @@ module.exports = class ToppingsCommand extends Command {
         let serverToppings = this.client.provider.get(msg.guild.id, "pizzaToppings", []);
         topping = topping.toLowerCase();
 
+        const defaultToppings = [
+            "Kinkku", "Salami", "Herkkusieni", "Katkarapu", "Oliivi", "Pekoni",
+            "Kebab", "Kana", "Aurajuusto", "Mozzarella", "Tuplajuusto", "Paprika",
+            "Tonnikala", "Smetana", "Jalapeno"
+        ];
+
         if (method === "add") {
             if (topping === "") return msg.channel.send(`The topping can not be blank`);
             if (_.includes(serverToppings, topping)) return msg.channel.send(`${topping} is already in the server toppings`);
@@ -49,6 +55,13 @@ module.exports = class ToppingsCommand extends Command {
         }
         else if (method === "view") {
             msg.channel.send(`Toppings in this server: ${serverToppings.join(', ')}`);
+        }
+        else if (method === "default") {
+            defaultToppings.forEach(topping => {
+                if (!_.includes(serverToppings, topping)) serverToppings.push(topping);
+            });
+            this.client.provider.set(msg.guild.id, "pizzaToppings", serverToppings);
+            msg.channel.send(`Added default toppings to the servers topping list.`);
         }
         else {
             msg.channel.send(`${method} is not a valid argument for method. Use **add, remove or view**.`);
