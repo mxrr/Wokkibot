@@ -16,8 +16,8 @@ module.exports = class SkipCommand extends Command {
         });
     }
 
-    run(msg) {
-        const queue = this.queue.get(msg.guild.id);
+    async run(msg) {
+        const queue = await this.queue.get(msg.guild.id);
         if (!msg.member.voiceChannel) return msg.reply(`You must be in a voice channel to skip a song`);
         if (!queue) return msg.channel.send(`There is nothing playing to skip`);
 
