@@ -5,10 +5,9 @@ A JavaScript Discord bot using Discord.js and Commando
 - NodeJS v8+
 
 # Installation
-- `git clone https://github.com/Wokkipannu/Wokkibot.git`
-- `cd Wokkibot`
-- `npm install`
+- `git clone https://github.com/Wokkipannu/Wokkibot.git && cd Wokkibot && npm install`
+- `mv config.json.example config.json && nano config.json`
 - Register new Discord application [here](https://discordapp.com/developers/applications/me#top)
 - Create new project in [Google Developers Console](https://developers.google.com/youtube/v3/getting-started)
-- Rename config.js.example to config.js and add bot token, google api key, twich api key to the file
+- Rename config.json.example to config.json and add bot token, google api key, twich api key to the file
 - `npm start`
