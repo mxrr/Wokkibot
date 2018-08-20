@@ -18,7 +18,7 @@ module.exports = class BitrateCommand extends Command {
             args: [
                 {
                     key: 'value',
-                    prompt: 'Enter bitrate\n',
+                    prompt: 'Enter bitrate',
                     type: 'integer'
                 }
             ]
