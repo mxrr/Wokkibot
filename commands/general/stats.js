@@ -4,6 +4,7 @@ const winston = require('winston');
 const moment = require('moment');
 require('moment-duration-format');
 const { stripIndents } = require('common-tags');
+const si = require('systeminformation');
 
 module.exports = class StatsCommand extends Command {
     constructor(client) {
@@ -21,15 +22,18 @@ module.exports = class StatsCommand extends Command {
     }
 
     run(msg) {
-        const statsEmbed = new MessageEmbed()
-            .setColor('#ffa500')
-            .setDescription('**Wokkibot Stats**')
-            .addField(`❯ Uptime`, moment.duration(this.client.uptime).format('d[ days], h[ hours], m[ minutes, and ]s[ seconds]'), true)
-            .addField(`❯ Memory usage`, `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`, true)
-            .addField(`❯ Spying on`, stripIndents`• Guilds: ${this.client.guilds.size}\n• Channels: ${this.client.channels.size}\n• Users: ${this.client.guilds.map(guild => guild.memberCount).reduce((a, b) => a + b)}`, true)
-            .setThumbnail(this.client.user.displayAvatarURL({ format: 'png' }));
+        si.cpuTemperature(function(data) {
+            const statsEmbed = new MessageEmbed()
+                .setColor('#ffa500')
+                .setDescription('**Wokkibot Stats**')
+                .addField(`❯ Uptime`, moment.duration(this.client.uptime).format('d[ days], h[ hours], m[ minutes, and ]s[ seconds]'), true)
+                .addField(`❯ Memory usage`, `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`, true)
+                .addField(`❯ Spying on`, stripIndents`• Guilds: ${this.client.guilds.size}\n• Channels: ${this.client.channels.size}\n• Users: ${this.client.guilds.map(guild => guild.memberCount).reduce((a, b) => a + b)}`, true)
+                .addField(`❯ Temperature`, `${data.main} °C`, true)
+                .setThumbnail(this.client.user.displayAvatarURL({ format: 'png' }));
 
-        msg.channel.send(statsEmbed);
+            msg.channel.send(statsEmbed);
+        });
     }
 
     timeString(seconds, forceHours = false) {
