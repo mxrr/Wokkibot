@@ -23,7 +23,7 @@ module.exports = class AccountAgeCommand extends Command {
 
     async run(msg, { user }) {
         if (user === "") user = msg.author;
-        else user = msg.mentions.user.first(1)[0];
+        else user = msg.mentions.users.first(1)[0];
 
         msg.channel.send(`Account **${user.username}** was created at **${moment(user.createdAt).format('DD.MM.YYYY HH:mm:ss')}**`);
     }
