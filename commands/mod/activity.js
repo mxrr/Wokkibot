@@ -28,7 +28,7 @@ module.exports = class ActivityCommand extends Command {
             ]
         });
 
-        const enviroinment = process.env.NODE_ENV || "DEVELOPMENT";
+        this.environment = process.env.NODE_ENV || "DEVELOPMENT";
     }
 
     hasPermission(msg) {
@@ -39,7 +39,7 @@ module.exports = class ActivityCommand extends Command {
         const resultEmbed = new MessageEmbed();
 
         msg.client.user.setActivity(activity, { type: type });
-        let config = require('../../config.json')[this.enviroinment];
+        let config = require('../../config.json')[this.environment];
         config.ACTIVITY = activity;
         config.ACTIVITY_TYPE = type;
         fs.writeFile('./config.json', JSON.stringify(config, null, 2), function(error) {
