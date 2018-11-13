@@ -14,7 +14,6 @@
     "discord.js": "discordjs/discord.js",
     "discord.js-commando": "discordjs/Commando",
     "ffmpeg-binaries": "^3.2.2-3",
-    "fs": "0.0.1-security",
     "lodash": "^4.17.5",
     "moment": "^2.20.1",
     "moment-duration-format": "^2.1.0",
