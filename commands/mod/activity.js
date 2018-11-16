@@ -35,8 +35,8 @@ module.exports = class ActivityCommand extends Command {
 
     if (acceptedTypes.includes(type)) {
       let config = require('../../config.json')[this.environment];
-      config[this.environment].ACTIVITY.TYPE = type;
-      config[this.environment].ACTIVITY.TEXT = activity;
+      config.ACTIVITY.TYPE = type;
+      config.ACTIVITY.TEXT = activity;
 
       fs.writeFile('./config.json', JSON.stringify(config, null, 2), (err) => {
         if (err) return [this.client.logger.error(err),msg.channel.send('Could not change activity. More information logged to console.')];
