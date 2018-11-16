@@ -31,12 +31,13 @@ module.exports = class ActivityCommand extends Command {
   }
 
   run(msg, { activity, type }) {
+    type = type.toUpperCase();
     const acceptedTypes = ['PLAYING', 'STREAMING', 'LISTENING', 'WATCHING'];
 
     if (acceptedTypes.includes(type)) {
-      let config = require('../../config.json')[this.environment];
-      config.ACTIVITY.TYPE = type;
-      config.ACTIVITY.TEXT = activity;
+      let config = require('../../config.json');
+      config[this.environment].ACTIVITY.TYPE = type;
+      config[this.environment].ACTIVITY.TEXT = activity;
 
       fs.writeFile('./config.json', JSON.stringify(config, null, 2), (err) => {
         if (err) return [this.client.logger.error(err),msg.channel.send('Could not change activity. More information logged to console.')];
