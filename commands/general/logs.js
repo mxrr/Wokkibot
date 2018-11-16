@@ -31,7 +31,7 @@ module.exports = class LogsCommand extends Command {
       lines = _.reverse(lines); // Reverse the lines
       lines = _.take(lines, limit + 1) // Take number of lines
 
-      msg.channel.send(`Last ${limit} rows of logs\n\`\`\`css\n${lines.join("\n")}\`\`\``).catch(e => msg.channel.send(`Could not fetch logs. Try with smaller amount.\n\`\`\`${e}\`\`\``));
+      msg.channel.send(`Last ${limit} rows of logs\n\`\`\`css\n${lines.join("\n")}\`\`\``).catch(e => msg.channel.send(`Could not fetch logs. Try with smaller amount.\n\`\`\`\n${e}\n\`\`\``));
     });
   }
 
