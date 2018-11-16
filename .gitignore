@@ -62,6 +62,8 @@ typings/
 
 #
 config.json
-invite.txt
 package-lock.json
-settings.sqlite3
+users.db
+guilds.db
+blacklist.db
+wokkibot.log
