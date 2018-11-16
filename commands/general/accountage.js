@@ -5,6 +5,7 @@ module.exports = class AccountAgeCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'accountage',
+      aliases: ['age'],
       group: 'general',
       memberName: 'accountage',
       description: 'Get your Discord accounts creation date',
@@ -22,8 +23,7 @@ module.exports = class AccountAgeCommand extends Command {
   }
 
   async run(msg, { user }) {
-    if (user === "") user = msg.author;
-    else user = msg.mentions.users.first(1)[0];
+    user = user ? msg.mentions.users.first(1)[0] : msg.author;
 
     msg.channel.send(`Account **${user.username}** was created at **${moment(user.createdAt).format('DD.MM.YYYY HH:mm:ss')}** which was **${this.numberWithCommas(moment().diff(user.createdAt, 'days'))} days ago**.`);
   }

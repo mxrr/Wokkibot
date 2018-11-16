@@ -1,35 +1,27 @@
 {
   "name": "wokkibot",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Discord bot",
-  "main": "wokkibot.js",
+  "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=PRODUCTION node wokkibot.js",
-    "dev": "cross-env NODE_ENV=DEVELOPMENT node wokkibot.js"
+    "start": "NODE_ENV=PRODUCTION node index.js",
+    "dev": "NODE_ENV=DEVELOPMENT node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Wokki",
   "license": "ISC",
   "dependencies": {
-    "common-tags": "^1.6.0",
-    "discord.js": "discordjs/discord.js",
-    "discord.js-commando": "discordjs/Commando",
-    "ffmpeg-binaries": "^3.2.2-3",
-    "lodash": "^4.17.5",
-    "moment": "^2.20.1",
-    "moment-duration-format": "^2.1.0",
-    "moment-timer": "^1.2.2",
-    "node-opus": "^0.2.7",
-    "request": "^2.83.0",
-    "simple-youtube-api": "^5.0.1",
-    "socket.io": "^2.1.1",
-    "socket.io-client": "^2.1.1",
-    "sqlite": "^2.9.1",
+    "common-tags": "^1.8.0",
+    "discord.js": "github:discordjs/discord.js",
+    "discord.js-commando": "github:discordjs/Commando",
+    "lodash": "^4.17.11",
+    "moment": "^2.22.2",
+    "moment-duration-format": "^2.2.2",
+    "nedb": "^1.8.0",
+    "node-opus": "^0.3.1",
+    "simple-youtube-api": "^5.1.1",
     "systeminformation": "^3.47.0",
-    "uws": "^9.148.0",
-    "winston": "^2.4.0",
-    "ytdl-core": "^0.20.2"
-  },
-  "devDependencies": {
-    "cross-env": "^5.1.4"
+    "winston": "^3.1.0",
+    "ytdl-core": "^0.28.0"
   }
 }

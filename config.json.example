@@ -1,17 +1,24 @@
 {
-    "OWNER": "",
-    "GOOGLE_API_KEY": "",
-    "VOLUME": 1,
-    "DEVELOPMENT": {
-        "TOKEN": "",
-        "ACTIVITY": "",
-        "ACTIVITY_TYPE": "",
-        "PREFIX": ""
-    },
-    "PRODUCTION": {
-        "TOKEN": "",
-        "ACTIVITY": "",
-        "ACTIVITY_TYPE": "",
-        "PREFIX": ""
+  "PRODUCTION": {
+    "OWNER": [""],
+    "TOKEN": "",
+    "PREFIX": "",
+    "ACTIVITY": {
+      "TYPE": "",
+      "TEXT": ""
     }
+  },
+  "DEVELOPMENT": {
+    "OWNER": [""],
+    "TOKEN": "",
+    "PREFIX": "",
+    "ACTIVITY": {
+      "TYPE": "",
+      "TEXT": ""
+    }
+  },
+  "GLOBAL": {
+    "GOOGLE_API_KEY": "",
+    "PLAYLIST": false
+  }
 }

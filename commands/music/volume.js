@@ -1,42 +1,49 @@
 const { Command } = require('discord.js-commando');
-const winston = require('winston');
 
 module.exports = class VolumeCommand extends Command {
-    constructor(client) {
-        super(client, {
-            name: 'volume',
-            group: 'music',
-            memberName: 'volume',
-            description: 'Change current song volume',
-            details: 'Set the current songs volume between 0% and 100%',
-            examples: [`${client.commandPrefix}volume 50`],
-            guildOnly: true,
-            clientPermissions: ['SEND_MESSAGES'],
-            args: [
-                {
-                    key: 'volume',
-                    prompt: 'Enter volume',
-                    type: 'integer'
-                }
-            ]
-        });
-    }
+  constructor(client) {
+    super(client, {
+      name: 'volume',
+      group: 'music',
+      memberName: 'volume',
+      description: 'Change volume of songs for this guild',
+      guildOnly: true,
+      clientPermissions: ['CONNECT', 'SPEAK', 'SEND_MESSAGES'],
+      args: [
+        {
+          key: 'volume',
+          prompt: 'Enter volume',
+          type: 'integer'
+        }
+      ]
+    });
+  }
 
-    run(msg, { volume }) {
-        const queue = this.queue.get(msg.guild.id);
-        if (!msg.member.voiceChannel) return msg.reply(`You must be in a voice channel to skip a song`);
-        if (!queue) return msg.channel.send(`There is nothing playing`);
+  async run(msg, { volume }) {
+    if (volume > 200 || volume < 1) return msg.channel.send('Volume has to be between 1 and 200');
 
-        if (volume > 100) return msg.channel.send(`Volume can not be higher than 100%`);
-        if (volume < 1) return msg.channel.send(`Volume can't be lower than 1`);
+    const queue = await this.queue.get(msg.guild.id);
 
-        queue.connection.dispatcher.setVolumeLogarithmic((volume / 20) / 5);
-        return msg.channel.send(`Volume changed to **${volume}%**`);
-    }
+    this.client.db.guilds.findOne({ gid: msg.guild.id }, (err, data) => {
+      if (err) return [this.client.logger.error(err),msg.channel.send('An error occurred when trying to fetch guild info. More info logged to console.')];
 
-    get queue() {
-        if (!this._queue) this._queue = this.client.registry.resolveCommand('music:play').queue;
+      if (data) {
+        this.client.db.guilds.update({ gid: msg.guild.id }, { $set: { volume: volume } });
+      }
+      else {
+        this.client.db.guilds.insert({ gid: msg.guild.id, volume: volume });
+      }
 
-        return this._queue;
-    }
+      queue.volume = volume / 100;
+      queue.connection.dispatcher.setVolume(volume / 100);
+
+      msg.channel.send(`Volume changed to **${volume}%**`);
+    });
+  }
+
+  get queue() {
+    if (!this._queue) this._queue = this.client.registry.resolveCommand('music:play').queue;
+
+    return this._queue;
+  }
 }
