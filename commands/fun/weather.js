@@ -23,6 +23,8 @@ module.exports = class WeatherCommand extends Command {
   run(msg, { location }) {
     weather.find({search: location, degreeType: 'C'}, (err, result) => {
       if(err) return [this.client.logger.error(err),msg.channel.send('An error occurred while trying to get weather info. More information logged to console.')];
+      if (result.length < 1) return msg.channel.send(`No weather data for given location`);
+
       const embed = new MessageEmbed()
         .setColor('#00ff1d')
         .setTitle(`Weather in ${result[0].location.name}`)
