@@ -39,7 +39,7 @@ module.exports = class RollCommand extends Command {
   
         this.client.db.users.insert(row);
 
-        msg.channel.send(`${user.tag}'s IQ is **${data.iq}**`);
+        msg.channel.send(`${user.tag}'s IQ is **${randomIQ}**`);
       }
     });
   }
