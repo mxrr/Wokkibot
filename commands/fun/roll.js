@@ -21,6 +21,7 @@ module.exports = class RollCommand extends Command {
   }
 
   run(msg, { max }) {
+    if (max > 10000 || max < 1) return msg.channel.send(`Number must be between 1 and 10,000`);
     const roll = Math.round(Math.random() * max);
     msg.reply(`rolled **${roll}**`);
   }
