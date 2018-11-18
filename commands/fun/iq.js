@@ -31,8 +31,6 @@ module.exports = class RollCommand extends Command {
     this.client.db.users.findOne({ did: user.id }, (err, data) => {
       if (err) return this.client.logger.error(err);
 
-      console.log(randomIQ);
-
       if (data) {
         if (data.iq) {
           msg.channel.send(`${user.tag}'s IQ is **${data.iq}**`);
