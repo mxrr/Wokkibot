@@ -23,6 +23,8 @@ module.exports = class RollCommand extends Command {
     // Get user data
     user = user ? msg.mentions.users.first(1)[0] : msg.author;
 
+    let randomIQ = Math.floor(this.random() * 200 + 100) + 1;
+
     this.client.db.users.findOne({ did: user.id }, (err, data) => {
       if (err) return this.client.logger.error(err);
 
@@ -30,8 +32,6 @@ module.exports = class RollCommand extends Command {
         msg.channel.send(`${user.tag}'s IQ is **${data.iq}**`);
       }
       else {
-        let randomIQ = Math.floor(this.random() * 200 + 100) + 1;
-
         let row = {
           did: msg.author.id,
           iq: randomIQ
