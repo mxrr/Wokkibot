@@ -23,13 +23,24 @@ module.exports = class RollCommand extends Command {
     // Get user data
     user = user ? msg.mentions.users.first(1)[0] : msg.author;
 
-    let randomIQ = Math.floor(this.random() * 200 + 100) + 1;
+    let randomIQ = Math.floor(this.normalRandom() * 200 + 100) + 1;
+    while (Number.isNaN(randomIQ)) {
+      randomIQ = Math.floor(this.normalRandom() * 200 + 100) + 1;
+    }
 
     this.client.db.users.findOne({ did: user.id }, (err, data) => {
       if (err) return this.client.logger.error(err);
 
+      console.log(randomIQ);
+
       if (data) {
-        msg.channel.send(`${user.tag}'s IQ is **${data.iq}**`);
+        if (data.iq) {
+          msg.channel.send(`${user.tag}'s IQ is **${data.iq}**`);
+        }
+        else {
+          this.client.db.users.update({ did: user.id }, { $set: { iq: randomIQ } });
+          msg.channel.send(`${user.tag}'s IQ is **${randomIQ}**`);
+        }
       }
       else {
         let row = {
@@ -44,7 +55,7 @@ module.exports = class RollCommand extends Command {
     });
   }
 
-  random() {
+  normalRandom() {
     var val, u, v, s, mul;
 
     if(this.spareRandom !== null) {
@@ -53,10 +64,10 @@ module.exports = class RollCommand extends Command {
     }
     else {
       do {
-        u = Math.random()*2-1;
-        v = Math.random()*2-1;
+          u = Math.random()*2-1;
+          v = Math.random()*2-1;
 
-        s = u*u+v*v;
+          s = u*u+v*v;
       } while(s === 0 || s >= 1);
 
       mul = Math.sqrt(-2 * Math.log(s) / s);
