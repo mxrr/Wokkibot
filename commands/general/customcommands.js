@@ -14,21 +14,17 @@ module.exports = class CustomcommandsCommand extends Command {
   }
 
   run(msg) {
-    this.client.db.guilds.findOne({ gid: msg.guild.id }, (err, data) => {
-      if (err) return [this.client.logger.error(err),msg.channel.send(`Error occurred when trying to fetch guild info. More information logged to console.`)]
-
-      if (data) {
-        if (data.commands) {
-          let commands = [];
-          data.commands.forEach(command => {
-            commands.push(command.command);
-          });
-
-          return msg.channel.send(`**Custom commands (${data.commands.length})**\n\`\`\`\n${commands.join("\n")}\`\`\``);
+    this.client.db.getGuild(msg.guild.id)
+      .then(data => {
+        if (data && data.commands) {
+          return msg.channel.send(`**Custom commands (${data.commands.length})**\n\`\`\`\n${data.commands.map(cmd => cmd.command).join("\n")}\`\`\``);
         }
-      }
-
-      return msg.channel.send(`There are no custom commands on this server`);
-    });
+        else {
+          return msg.channel.send('Could not find any custom commands');
+        }
+      })
+      .catch(e => {
+        return [this.client.logger.error(e),msg.channel.send('An error occurred. More information logged to console')];
+      });
   }
 }
