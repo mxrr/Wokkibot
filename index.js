@@ -77,7 +77,7 @@ client
         .then(data => {
           if (data && data.commands) {
             let cmd = data.commands.find(cmd => cmd.command === cc);
-            if (cmd) return msg.channel.send(cmd.output);
+            if (cmd) return [client.logger.info(`${msg.author.tag} (${msg.author.id}) ran custom command ${cc}`),msg.channel.send(cmd.output)];
           }
         })
         .catch(e => {
