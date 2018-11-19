@@ -31,7 +31,7 @@ module.exports = class AddCommandCommand extends Command {
 
     let newCommand = {
       "command": command,
-      "outut": output
+      "output": output
     };
 
     this.client.db.getGuild(msg.guild.id)
