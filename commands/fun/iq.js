@@ -28,29 +28,19 @@ module.exports = class RollCommand extends Command {
       randomIQ = Math.floor(this.normalRandom() * 200 + 100) + 1;
     }
 
-    this.client.db.users.findOne({ did: user.id }, (err, data) => {
-      if (err) return this.client.logger.error(err);
-
-      if (data) {
-        if (data.iq) {
-          msg.channel.send(`${user.tag}'s IQ is **${data.iq}**`);
+    this.client.db.getUser(user.id)
+      .then(data => {
+        if (data && data.iq) {
+          return msg.channel.send(`${user}'s IQ is **${data.iq}**`);
         }
         else {
-          this.client.db.users.update({ did: user.id }, { $set: { iq: randomIQ } });
-          msg.channel.send(`${user.tag}'s IQ is **${randomIQ}**`);
+          this.client.db.updateUser(user.id, "iq", randomIQ);
+          return msg.channel.send(`${user}'s IQ is **${randomIQ}**`);
         }
-      }
-      else {
-        let row = {
-          did: msg.author.id,
-          iq: randomIQ
-        };
-  
-        this.client.db.users.insert(row);
-
-        msg.channel.send(`${user.tag}'s IQ is **${randomIQ}**`);
-      }
-    });
+      })
+      .catch(e => {
+        return [this.client.logger.error(e),msg.channel.send('An error occurred. More information logged to console.')];
+      });
   }
 
   normalRandom() {
