@@ -3,7 +3,6 @@ const Blacklist = require('./utils/blacklist');
 const Database = require('./utils/database');
 const winston = require('winston');
 const path = require('path');
-const _ = require('lodash');
 
 /**
  * Load settings
@@ -77,7 +76,7 @@ client
       client.db.getGuild(msg.guild.id)
         .then(data => {
           if (data && data.commands) {
-            let cmd = _.find(data.commands, { command: cc });
+            let cmd = data.commands.find(cmd => cmd.command === cc);
             if (cmd) return msg.channel.send(cmd.output);
           }
         })
