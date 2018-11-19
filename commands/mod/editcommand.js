@@ -33,8 +33,13 @@ module.exports = class EditCommandCommand extends Command {
           if (data.commands.find(cmd => cmd.command === command)) {
             let cmd = data.commands.find(cmd => cmd.command === command);
             cmd.output = output;
-            this.client.db.updateGuild(msg.guild.id, "commands", data.commands);
-            return msg.channel.send(`Command __${command}__ updated!`);
+            this.client.db.updateGuild(msg.guild.id, "commands", data.commands)
+              .then(() => {
+                return msg.channel.send(`Command __${command}__ updated!`);
+              })
+              .catch(e => {
+                return [this.client.logger.error(e),msg.channel.send('An error occurred. More information logged to console')];
+              });
           }
           else {
             return msg.channel.send(`Could not find command __${command}__ from this server`);
