@@ -31,11 +31,13 @@ module.exports = class BlacklistCommand extends Command {
   run(msg, { user, reason }) {
     user = user ? msg.mentions.users.first(1)[0] : msg.author;
 
-    this.client.db.blacklist.findOne({ did: user.id }, (err, data) => {
-      if (err) return [this.client.logger.error(err),msg.channel.send(`An error occurred when trying to fetch blacklist data. More info logged to console.`)];
-      if (data) return msg.channel.send(`${user.tag} is already blacklisted`);
-    });
-
-    this.client.db.blacklist.insert({ did: user.id, reason: reason });
+    this.client.blacklist.add(user.id, reason)
+      .then(data => {
+        if (typeof data === 'string') return msg.channel.send(data);
+        else return msg.channel.send(`${user} is now blacklisted`);
+      })
+      .catch(e => {
+        return [this.client.logger.error(e),msg.channel.send('An error occurred. More information logged to console.')];
+      });
   }
 }
