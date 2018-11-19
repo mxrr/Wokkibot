@@ -43,6 +43,33 @@ module.exports = class Database {
     });
   }
 
+  pushUser (id, field, value) {
+    return new Promise((resolve, reject) => {
+      this.db.users.update({ did: id }, { $push: { [field]: value } }, (err, numAffected, affectedDocuments, upsert) => {
+        if (err) reject(err);
+        resolve(numAffected);
+      });
+    });
+  }
+
+  pullUser (id, field, value) {
+    return new Promise((resolve, reject) => {
+      this.db.users.update({ did: id }, { $pull: { [field]: value } }, (err, numAffected, affectedDocuments, upsert) => {
+        if (err) reject(err);
+        resolve(numAffected);
+      });
+    });
+  }
+
+  removeUser (id) {
+    return new Promise((resolve, reject) => {
+      this.db.users.remove({ did: id }, (err, numRemoved) => {
+        if (err) reject(err);
+        resolve(numRemoved);
+      });
+    });
+  }
+
   /**
    * Guild database
    */
@@ -57,17 +84,16 @@ module.exports = class Database {
 
   updateGuild (id, field, value) {
     return new Promise((resolve, reject) => {
-      let data;
       this.getGuild(id)
         .then(data => {
           if (data) {
-            data = this.db.guilds.update({ gid: id }, { $set: { [field]: value } }, (err, numAffected, affectedDocuments, upsert) => {
+            this.db.guilds.update({ gid: id }, { $set: { [field]: value } }, (err, numAffected, affectedDocuments, upsert) => {
               if (err) reject(err);
-              resolve(affectedDocuments);
+              resolve(numAffected);
             });
           }
           else {
-            data = this.db.guilds.insert({ gid: id, [field]: value }, (err, newDoc) => {
+            this.db.guilds.insert({ gid: id, [field]: value }, (err, newDoc) => {
               if (err) reject(err);
               resolve(newDoc);
             });
@@ -83,7 +109,7 @@ module.exports = class Database {
     return new Promise((resolve, reject) => {
       this.db.guilds.update({ gid: id }, { $push: { [field]: value } }, (err, numAffected, affectedDocuments, upsert) => {
         if (err) reject(err);
-        resolve(affectedDocuments);
+        resolve(numAffected);
       });
     });
   }
@@ -92,7 +118,16 @@ module.exports = class Database {
     return new Promise((resolve, reject) => {
       this.db.guilds.update({ gid: id }, { $pull: { [field]: value } }, (err, numAffected, affectedDocuments, upsert) => {
         if (err) reject(err);
-        resolve(affectedDocuments);
+        resolve(numAffected);
+      });
+    });
+  }
+
+  removeGuild (id) {
+    return new Promise((resolve, reject) => {
+      this.db.guilds.remove({ gid: id }, (err, numRemoved) => {
+        if (err) reject(err);
+        resolve(numRemoved);
       });
     });
   }
