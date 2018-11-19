@@ -1,6 +1,15 @@
 # Wokkibot
 A JavaScript Discord bot using Discord.js and Commando
 
+## Features
+* Music playing
+* Roll the die
+* Weather
+* Coins and dueling
+* Bulk message deleting
+* Custom commands
+* Other misc commands for bot management
+
 # Requirements
 - NodeJS v8+
 
