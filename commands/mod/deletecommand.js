@@ -22,18 +22,24 @@ module.exports = class DeleteCommandCommand extends Command {
   }
 
   run (msg, { command }) {
-    this.client.db.guilds.findOne({ gid: msg.guild.id }, (err, data) => {
-      if (err) return [this.client.logger.error(err),msg.channel.send(`An error occurred when trying to fetch guild info. More info logged to console.`)]
-
-      if (data) {
-        let cmd = data.commands.find(val => val.command === command);
-        if (cmd) {
-          this.client.db.guilds.update({ gid: msg.guild.id }, { $pull: { commands: cmd } });
-          return msg.channel.send(`Command ${command} removed`);
+    this.client.db.getGuild(msg.guild.id)
+      .then(data => {
+        if (data && data.commands) {
+          let cmd = data.commands.find(cmd => cmd.command === command);
+          this.client.db.pullGuild(msg.guild.id, "commands", cmd)
+            .then(data => {
+              return msg.channel.send(`Command __${command}__ removed`);
+            })
+            .catch(e => {
+              return [this.client.logger.error(e),msg.channel.send('An error occurred. More information logged to console.')];
+            });
         }
-      }
-
-      return msg.channel.send(`Could not find a command ${command} on this server`);
-    });
+        else {
+          return msg.channel.send('This server has no commands');
+        }
+      })
+      .catch(e => {
+        return [this.client.logger.error(e),msg.channel.send('An error occurred. More information logged to console.')];
+      });
   }
 }

@@ -27,21 +27,22 @@ module.exports = class EditCommandCommand extends Command {
   }
 
   run(msg, { command, output }) {
-    this.client.db.guilds.findOne({ gid: msg.guild.id }, (err, data) => {
-      if (err) return [this.client.logger.error(err),msg.channel.send(`An error occurred when trying to fetch guild info. More info logged to console.`)]
-
-      if (data) {
-        let cmd = data.commands.find(val => val.command === command);
-        if (cmd) {
-          cmd.output = output;
-
-          this.client.db.guilds.update({ gid: msg.guild.id }, { $set: { commands: data.commands } });
-
-          return msg.channel.send(`Command ${command} edited`);
+    this.client.db.getGuild(msg.guild.id)
+      .then(data => {
+        if (data && data.commands) {
+          if (data.commands.find(cmd => cmd.command === command)) {
+            let cmd = data.commands.find(cmd => cmd.command === command);
+            cmd.output = output;
+            this.client.db.updateGuild(msg.guild.id, "commands", data.commands);
+            return msg.channel.send(`Command __${command}__ updated!`);
+          }
+          else {
+            return msg.channel.send(`Could not find command __${command}__ from this server`);
+          }
         }
-      }
-
-      return msg.channel.send(`Could not find a command with name ${command}`);
-    });
+      })
+      .catch(e => {
+        return [this.client.logger.error(e),msg.channel.send('An error occurred. More information logged to console')];
+      });
   }
 }

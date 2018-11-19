@@ -29,30 +29,25 @@ module.exports = class AddCommandCommand extends Command {
   run(msg, { command, output }) {
     if (this.client.registry.commands.find(c => c.name === command)) return msg.channel.send(`Command name must be unique and it can not replace an existing command`);
 
-    this.client.db.guilds.findOne({ gid: msg.guild.id }, (err, data) => {
-      if (err) return this.client.logger.error(err);
+    let newCommand = {
+      "command": command,
+      "outut": output
+    };
 
-      let newCommand = {
-        "command": command,
-        "output": output
-      }
-
-      if (data) {
-        if (data.commands.find(val => val.command === command)) {
-          return msg.channel.send(`Command ${command} exists already on this server. Use editcom instead.`);
+    this.client.db.getGuild(msg.guild.id)
+      .then(data => {
+        if (data && data.commands) {
+          if (data.commands.find(cmd => cmd.command === command)) return msg.channel.send(`Command __${command}__ already exists`);
+          this.client.db.pushGuild(msg.guild.id, "commands", newCommand);
         }
-        this.client.db.guilds.update({ gid: msg.guild.id }, { $push: { commands: newCommand } });
-      }
-      else {
-        let commands = [];
-        commands.push(newCommand);
-        this.client.db.guilds.insert({
-          gid: msg.guild.id,
-          commands: commands
-        });
-      }
+        else {
+          this.client.db.updateGuild(msg.guild.id, "commands", [newCommand]);
+        }
 
-      msg.channel.send(`Added command **${command}** to the server`);
-    });
+        return msg.channel.send(`Added command ${command} to guild`);
+      })
+      .catch(e => {
+        return [this.client.logger.error(e),msg.channel.send('An error occurred. More information logged to console.')];
+      });
   }
 }
