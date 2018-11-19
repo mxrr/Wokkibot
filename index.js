@@ -1,5 +1,6 @@
 const Commando = require('discord.js-commando');
-const Datastore = require('nedb');
+const Blacklist = require('./utils/blacklist');
+const Database = require('./utils/database');
 const winston = require('winston');
 const path = require('path');
 const _ = require('lodash');
@@ -49,12 +50,9 @@ client.logger = winston.createLogger({
 client.logger.info(`Starting Wokkibot in ${environment} environment`);
 
 /**
- * Datastore
+ * Database
  */
-client.db = {};
-client.db.users = new Datastore({ filename: './users.db', autoload: true });
-client.db.guilds = new Datastore({ filename: './guilds.db', autoload: true });
-client.db.blacklist = new Datastore({ filename: './blacklist.db', autoload: true });
+client.db = new Database();
 
 /**
  * Create client listeners
@@ -76,26 +74,27 @@ client
     if (msg.content.startsWith(client.commandPrefix)) {
       let cc = msg.content.split(client.commandPrefix)[1];
 
-      client.db.guilds.findOne({ gid: msg.guild.id }, (err, data) => {
-        if (err) return [client.logger.error(err),msg.channel.send(`An error occurred when trying to run custom command. More information logged to console.`)];
-        
-        if (data) {
-          let cmd = _.find(data.commands, { command: cc });
-          if (cmd) return msg.channel.send(cmd.output);
-        }
-      })
+      client.db.getGuild(msg.guild.id)
+        .then(data => {
+          if (data && data.commands) {
+            let cmd = _.find(data.commands, { command: cc });
+            if (cmd) return msg.channel.send(cmd.output);
+          }
+        })
+        .catch(e => {
+          return [client.logger.error(e),msg.channel.send('An error occurred. More information logged to console.')];
+        });
     }
   });
 
 /**
  * Blacklist
  */
+client.blacklist = new Blacklist();
+
 client.dispatcher
   .addInhibitor(msg => {
-    client.db.blacklist.findOne({ did: msg.author.id }, (err, data) => {
-      if (err) return client.logger.error(err);
-      if (data) return client.logger.info(`${msg.author.tag} (${msg.author.id}) tried to run command but they are blacklisted`);
-    });
+    if(client.blacklist.isBlacklisted(msg.author.id)) return client.logger.info(`${msg.author.tag} (${msg.author.id}) tried to run command but they are blacklisted`);
   });
 
 /**
