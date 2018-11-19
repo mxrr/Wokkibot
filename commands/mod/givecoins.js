@@ -30,27 +30,19 @@ module.exports = class GiveCoinsCommand extends Command {
 
   run(msg, { user, coins }) {
     user = msg.mentions.users.first(1)[0];
-    if (!user) return msg.channel.send(`You must mention the user`);
+    if (!user) return msg.channel.send('You must mention the user');
 
-    this.client.db.users.findOne({ did: msg.author.id }, (err, data) => {
-      if (err) return [this.client.logger.error(err),msg.channel.send('An error occurred while trying to fetch user data. More information logged to console.')];
-    
-      if (data) {
+    this.client.db.getUser(user.id)
+      .then(data => {
         if (data.coins) {
-          this.client.db.users.update({ did: user.id }, { $set: { coins: data.coins + coins } });
+          this.client.db.updateUser(user.id, "coins", coins + data.coins);
         }
         else {
-          this.client.db.users.update({ did: user.id }, { $set: { coins: 100 + coins } });
+          this.client.db.updateUser(user.id, "coins", coins);
         }
-      }
-      else {
-        let row = {
-          did: msg.author.id,
-          coins: 100 + coins
-        }
-
-        this.client.db.users.insert(row);
-      }
-    });
+      })
+      .catch(e => {
+        return [this.client.logger.error(e),msg.channel.send('An error occurred. More information logged to console.')];
+      });
   }
 }
