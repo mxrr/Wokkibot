@@ -31,6 +31,7 @@ module.exports = class DuelCommand extends Command {
 
   run(msg, { user, coins }) {
     user = msg.mentions.users.first(1)[0];
+    if (user === msg.author) return msg.channel.send('You must challenge someone other than yourself');
     if (!user) return msg.channel.send('You must mention the user to duel');
 
     if (coins < 0) return msg.channel.send('Bets must be above 1');
