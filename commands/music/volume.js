@@ -24,21 +24,20 @@ module.exports = class VolumeCommand extends Command {
 
     const queue = await this.queue.get(msg.guild.id);
 
-    this.client.db.guilds.findOne({ gid: msg.guild.id }, (err, data) => {
-      if (err) return [this.client.logger.error(err),msg.channel.send('An error occurred when trying to fetch guild info. More info logged to console.')];
-
-      if (data) {
-        this.client.db.guilds.update({ gid: msg.guild.id }, { $set: { volume: volume } });
-      }
-      else {
-        this.client.db.guilds.insert({ gid: msg.guild.id, volume: volume });
-      }
-
-      queue.volume = volume / 100;
-      queue.connection.dispatcher.setVolume(volume / 100);
-
-      msg.channel.send(`Volume changed to **${volume}%**`);
-    });
+    this.client.db.updateGuild(msg,guild.id, "volume", volume)
+      .then(() => {
+        queue.volume = volume / 100;
+        queue.connection.dispatcher.setVolume(volume / 100);
+  
+        msg.channel.send(`Volume changed to **${volume}%**`);
+      })
+      .catch(e => {
+        queue.volume = volume / 100;
+        queue.connection.dispatcher.setVolume(volume / 100);
+  
+        msg.channel.send(`An error occurred and we were unable to save volume for this server. The volume has still been adjusted for currently playing song. More information logged to console.\nVolume changed to **${volume}%**`);
+        return this.client.logger.error(e);
+      });
   }
 
   get queue() {
