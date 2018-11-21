@@ -24,7 +24,7 @@ module.exports = class VolumeCommand extends Command {
 
     const queue = await this.queue.get(msg.guild.id);
 
-    this.client.db.updateGuild(msg,guild.id, "volume", volume)
+    this.client.db.updateGuild(msg.guild.id, "volume", volume)
       .then(() => {
         queue.volume = volume / 100;
         queue.connection.dispatcher.setVolume(volume / 100);
