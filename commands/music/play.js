@@ -60,64 +60,115 @@ module.exports = class PlayCommand extends Command {
   async handleVideo(video, msg, voiceChannel, playlist = false) {
     const queue = this.queue.get(msg.guild.id);
 
-    this.client.db.guilds.findOne({ gid: msg.guild.id }, async (err, data) => {
-      if (err) return [this.client.logger.error(err),msg.channel.send('An error occurred when trying to fetch guild info. More info logged to console.')];
+    this.client.db.getGuild(msg.guild.id)
+      .then(data => {
+        if (data && data.volume) this.volume = data.volume / 100;
 
-      if (data) {
-        this.volume = data.volume / 100;
-      }
-
-      const song = {
-        id: video.id,
-        title: Util.escapeMarkdown(video.title),
-        url: `https://www.youtube.com/watch?v=${video.id}`,
-        duration: video.durationSeconds ? video.durationSeconds : video.duration / 1000,
-        thumbnail: `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`,
-        requester: msg.author
-      };
-  
-      let songEmbed = new MessageEmbed()
-        .setColor('#3bff00')
-        .setTitle(`Song added to queue`);
-  
-      if (!queue) {
-        const queueConstruct = {
-          textChannel: msg.channel,
-          voiceChannel: voiceChannel,
-          connection: null,
-          songs: [],
-          volume: this.volume,
-          playing: true
+        const song = {
+          id: video.id,
+          title: Util.escapeMarkdown(video.title),
+          url: `https://www.youtube.com/watch?v=${video.id}`,
+          duration: video.durationSeconds ? video.durationSeconds : video.duration / 1000,
+          thumbnail: `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`,
+          requester: msg.author
         };
-        this.queue.set(msg.guild.id, queueConstruct);
-  
-        queueConstruct.songs.push(song);
-  
-        songEmbed
-          .setDescription(`[${song.title}](https://www.youtube.com/watch?v=${song.id})\n**Duration:** ${this.timeString(song.duration)}\n**Requested by:** ${msg.author.tag}`)
-          .setImage(song.thumbnail);
-        msg.channel.send(songEmbed);
-  
-        try {
-          let connection = await voiceChannel.join();
-          queueConstruct.connection = connection;
-          this.play(msg.guild, queueConstruct.songs[0]);
-        } catch (error) {
-          this.client.logger.error(`Couldn't join voice channel: ${error}`);
-          this.queue.delete(msg.guild.id);
-          return msg.channel.send(`Could not join the voice channel: ${error}`);
-        }
-      }
-      else {
-        queue.songs.push(song);
-        songEmbed
+    
+        let songEmbed = new MessageEmbed()
+          .setColor('#3bff00')
+          .setTitle(`Song added to queue`);
+    
+        if (!queue) {
+          const queueConstruct = {
+            textChannel: msg.channel,
+            voiceChannel: voiceChannel,
+            connection: null,
+            songs: [],
+            volume: this.volume,
+            playing: true
+          };
+          this.queue.set(msg.guild.id, queueConstruct);
+    
+          queueConstruct.songs.push(song);
+    
+          songEmbed
             .setDescription(`[${song.title}](https://www.youtube.com/watch?v=${song.id})\n**Duration:** ${this.timeString(song.duration)}\n**Requested by:** ${msg.author.tag}`)
             .setImage(song.thumbnail);
-        if (playlist) return undefined;
-        else return msg.channel.send(songEmbed);
-      }
-      return undefined;
-    });
+          msg.channel.send(songEmbed);
+    
+          try {
+            let connection = await voiceChannel.join();
+            queueConstruct.connection = connection;
+            this.play(msg.guild, queueConstruct.songs[0]);
+          } catch (error) {
+            this.client.logger.error(`Couldn't join voice channel: ${error}`);
+            this.queue.delete(msg.guild.id);
+            return msg.channel.send(`Could not join the voice channel: ${error}`);
+          }
+        }
+        else {
+          queue.songs.push(song);
+          songEmbed
+              .setDescription(`[${song.title}](https://www.youtube.com/watch?v=${song.id})\n**Duration:** ${this.timeString(song.duration)}\n**Requested by:** ${msg.author.tag}`)
+              .setImage(song.thumbnail);
+          if (playlist) return undefined;
+          else return msg.channel.send(songEmbed);
+        }
+        return undefined;
+      })
+      .catch(e => {
+        this.client.logger.error(e);
+
+        const song = {
+          id: video.id,
+          title: Util.escapeMarkdown(video.title),
+          url: `https://www.youtube.com/watch?v=${video.id}`,
+          duration: video.durationSeconds ? video.durationSeconds : video.duration / 1000,
+          thumbnail: `https://img.youtube.com/vi/${video.id}/mqdefault.jpg`,
+          requester: msg.author
+        };
+    
+        let songEmbed = new MessageEmbed()
+          .setColor('#3bff00')
+          .setTitle(`Song added to queue`);
+    
+        if (!queue) {
+          const queueConstruct = {
+            textChannel: msg.channel,
+            voiceChannel: voiceChannel,
+            connection: null,
+            songs: [],
+            volume: this.volume,
+            playing: true
+          };
+          this.queue.set(msg.guild.id, queueConstruct);
+    
+          queueConstruct.songs.push(song);
+    
+          songEmbed
+            .setDescription(`[${song.title}](https://www.youtube.com/watch?v=${song.id})\n**Duration:** ${this.timeString(song.duration)}\n**Requested by:** ${msg.author.tag}`)
+            .setImage(song.thumbnail);
+          msg.channel.send(songEmbed);
+    
+          try {
+            let connection = await voiceChannel.join();
+            queueConstruct.connection = connection;
+            this.play(msg.guild, queueConstruct.songs[0]);
+          } catch (error) {
+            this.client.logger.error(`Couldn't join voice channel: ${error}`);
+            this.queue.delete(msg.guild.id);
+            return msg.channel.send(`Could not join the voice channel: ${error}`);
+          }
+        }
+        else {
+          queue.songs.push(song);
+          songEmbed
+              .setDescription(`[${song.title}](https://www.youtube.com/watch?v=${song.id})\n**Duration:** ${this.timeString(song.duration)}\n**Requested by:** ${msg.author.tag}`)
+              .setImage(song.thumbnail);
+          if (playlist) return undefined;
+          else return msg.channel.send(songEmbed);
+        }
+        return undefined;
+      });
   }
 
   async play(guild, song) {
