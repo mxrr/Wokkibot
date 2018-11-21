@@ -61,7 +61,7 @@ module.exports = class PlayCommand extends Command {
     const queue = this.queue.get(msg.guild.id);
 
     this.client.db.getGuild(msg.guild.id)
-      .then(data => {
+      .then(async data => {
         if (data && data.volume) this.volume = data.volume / 100;
 
         const song = {
@@ -115,7 +115,7 @@ module.exports = class PlayCommand extends Command {
         }
         return undefined;
       })
-      .catch(e => {
+      .catch(async e => {
         this.client.logger.error(e);
 
         const song = {
