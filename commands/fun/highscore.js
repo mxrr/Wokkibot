@@ -16,7 +16,7 @@ module.exports = class HighScoreCommand extends Command {
     this.client.db.getUsers()
       .then(data => {
         data.forEach(user => {
-          highscores.push({ name: msg.guild.members.get(user.did).user.username, iq: user.iq })
+          if (user.iq) highscores.push({ name: msg.guild.members.get(user.did).user.username, iq: user.iq })
         });
 
         highscores.sort((a, b) => a.iq > b.iq);
