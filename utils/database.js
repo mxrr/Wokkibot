@@ -20,6 +20,15 @@ module.exports = class Database {
     });
   }
 
+  getUsers () {
+    return new Promise((resolve, reject) => {
+      this.db.users.find({}, (err, data) => {
+        if (err) reject(err);
+        resolve(data);
+      });
+    });
+  }
+
   updateUser (id, field, value) {
     return new Promise((resolve, reject) => {
       this.getUser(id)
