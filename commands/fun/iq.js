@@ -23,6 +23,10 @@ module.exports = class IQCommand extends Command {
     // Get user data
     user = user ? msg.mentions.users.first(1)[0] : msg.author;
 
+    const PepoClap = this.client.emojis.find(emoji => emoji.name === "feelspepoclap");
+    const PepoDance = this.client.emojis.find(emoji => emoji.name === "PepoDance");
+    const PepoSpin = this.client.emojis.find(emoji => emoji.name === "feelspepospin");
+
     let randomIQ = Math.floor(this.normalRandom() * 200 + 100) + 1;
     while (Number.isNaN(randomIQ)) {
       randomIQ = Math.floor(this.normalRandom() * 200 + 100) + 1;
@@ -31,11 +35,17 @@ module.exports = class IQCommand extends Command {
     this.client.db.getUser(user.id)
       .then(data => {
         if (data && data.iq) {
-          return msg.channel.send(`${user}'s IQ is **${data.iq}**`);
+          if (data.iq < 90) return msg.channel.send(`${user}'s IQ is **${data.iq}** ${PepoSpin}`);
+          else if (data.iq > 90 && data.iq < 110) return msg.channel.send(`${user}'s IQ is **${data.iq}** ${PepoClap}`);
+          else if (data.iq > 110) return msg.channel.send(`${user}'s IQ is **${data.iq}** ${PepoDance}`);
+          else return msg.channel.send(`${user}'s IQ is **${data.iq}**`);
         }
         else {
           this.client.db.updateUser(user.id, "iq", randomIQ);
-          return msg.channel.send(`${user}'s IQ is **${randomIQ}**`);
+          if (randomIQ < 90) return msg.channel.send(`${user}'s IQ is **${randomIQ}** ${PepoSpin}`);
+          else if (randomIQ > 90 && randomIQ < 110) return msg.channel.send(`${user}'s IQ is **${randomIQ}** ${PepoClap}`);
+          else if (randomIQ > 110) return msg.channel.send(`${user}'s IQ is **${randomIQ}** ${PepoDance}`);
+          else return msg.channel.send(`${user}'s IQ is **${randomIQ}**`);
         }
       })
       .catch(e => {
