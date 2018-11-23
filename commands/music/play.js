@@ -150,7 +150,12 @@ module.exports = class PlayCommand extends Command {
           queue.songs.shift();
           this.play(guild, queue.songs[0]);
       })
-      .on('error', error => this.client.logger.error(error));
+      .on('error', error => {
+        msg.channel.send('An error occurred\n\`\`\`\n${e}\`\`\`');
+        this.client.logger.error(error);
+        queue.songs.shift();
+        this.play(guild, queue.songs[0]);
+      });
 
     dispatcher.setVolume(queue.volume);
 
