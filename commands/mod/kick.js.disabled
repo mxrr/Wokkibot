@@ -1,0 +1,47 @@
+const { Command } = require('discord.js-commando');
+
+module.exports = class WarnCommand extends Command {
+  constructor(client) {
+    super(client, {
+      name: 'kick',
+      group: 'mod',
+      memberName: 'kick',
+      description: 'Kick user from server',
+      clientPermissions: ['SEND_MESSAGES'],
+      guildOnly: true,
+      args: [
+        {
+          key: 'user',
+          prompt: 'Mention user that should be kicked',
+          type: 'string'
+        },
+        {
+          key: 'reason',
+          prompt: 'Give a reason for the kick',
+          type: 'string'
+        }
+      ]
+    });
+  }
+
+  run (msg, { user, reason }) {
+    user = msg.mentions.users.first();
+    if (user) {
+      const member = message.guild.member(user);
+      if (member) {
+        member.kick(reason).then(() => {
+          msg.reply(`Successfully kicked ${user.tag}`);
+        }).catch(err => {
+          msg.reply(`Unable to kick user`);
+          this.client.logger.error('User kick failed', err);
+        });
+      }
+      else {
+        msg.reply('This user does not exist in this server');
+      }
+    }
+    else {
+      msg.reply('You must mention user to kick')
+    }
+  }
+}

@@ -1,0 +1,43 @@
+const { Command } = require('discord.js-commando');
+const request = require('superagent');
+
+module.exports = class WarnCommand extends Command {
+  constructor(client) {
+    super(client, {
+      name: 'warn',
+      group: 'mod',
+      memberName: 'warn',
+      description: 'Warn a user',
+      clientPermissions: ['SEND_MESSAGES'],
+      guildOnly: true,
+      args: [
+        {
+          key: 'user',
+          prompt: 'Mention user that should be warned',
+          type: 'string'
+        },
+        {
+          key: 'reason',
+          prompt: 'Give a reason for this warning',
+          type: 'string'
+        }
+      ]
+    });
+  }
+
+  run (msg, { user, reason }) {
+    user = msg.mentions.users.first();
+    if (user) {
+      request
+        .post(`localhost:3000/warn`)
+        .send({ did: user.id, reason: reason, guild: msg.guild.id })
+        .end((err, res) => {
+          if (err) return [this.client.logger.error('Could not connect to backend', err),msg.reply('Unable to connect to backend')];
+          msg.reply(`Warning sent to ${user.tag}`);
+        });
+    }
+    else {
+      msg.reply('You must mention user to warn');
+    }
+  }
+}

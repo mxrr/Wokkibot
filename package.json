@@ -1,0 +1,23 @@
+{
+  "name": "Bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon bot.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "github:discordjs/discord.js",
+    "discord.js-commando": "github:discordjs/commando",
+    "ffmpeg-binaries": "^4.0.0",
+    "opusscript": "0.0.6",
+    "simple-youtube-api": "^5.1.1",
+    "superagent": "^4.1.0",
+    "weather-js": "^2.0.0",
+    "winston": "^3.2.1",
+    "ytdl-core-discord": "^1.0.3"
+  }
+}
