@@ -47,7 +47,10 @@ client
 
 client.registry
   .registerGroups([
-    ['music', 'Music commands']
+    ['music', 'Music commands'],
+    ['fun', 'Fun commands'],
+    ['mod', 'Moderation commands'],
+    ['general', 'General commands']
   ])
   .registerDefaults()
   .registerCommandsIn(path.join(__dirname, 'commands'));
