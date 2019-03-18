@@ -55,4 +55,7 @@ client.registry
   .registerDefaults()
   .registerCommandsIn(path.join(__dirname, 'commands'));
 
+// Set our own unknown command response
+client.registry.unknownCommand = client.registry.commands.get('unknown');
+
 client.login(TOKEN);
