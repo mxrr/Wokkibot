@@ -1,5 +1,5 @@
 const Commando = require('discord.js-commando');
-const request = require('superagent');
+//const request = require('superagent');
 const winston = require('winston');
 const path = require('path');
 
@@ -36,14 +36,31 @@ client
   .on('commandError', (cmd, err) => client.logger.error(`Error occurred when running command ${cmd.groupID}:${cmd.memberName}`, err))
   // Backend updating
   .on('guildUpdate', (oldGuild, newGuild) => {
-    request
+    /*request
       .put(`localhost:3000/guild/${oldGuild.id}`)
       .send({ did: newGuild.id, name: newGuild.name, owner: newGuild.ownerID })
       .end((err, res) => {
         if (err) return client.logger.error('Could not update guild to backend', err);
         client.logger.info('Updated guild to backend');
-      });
+      });*/
   });
+
+client.customCommands = new Map();
+
+/*client.guilds.forEach(guild => {
+  request
+    .get(`localhost:3000/guild/${guild.id}`)
+    .end((err, res) => {
+      if (err) return client.logger.error('Could not connect to backend', err);
+      else {
+        client.customCommands.set(guild.id, new Map());
+        let guildCommands = client.customCommands.get(guild.id);
+        res.commands.forEach(command => {
+          guildCommands.set(command.key, command.value);
+        });
+      }
+    });
+});*/
 
 client.registry
   .registerGroups([
