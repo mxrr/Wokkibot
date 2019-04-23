@@ -1,8 +1,8 @@
 {
-  "name": "Wokkibot",
+  "name": "wokkibot",
   "version": "1.0.0",
   "description": "A Discord bot",
-  "main": "index.js",
+  "main": "bot.js",
   "scripts": {
     "start": "node bot"
   },
