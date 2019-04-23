@@ -4,6 +4,11 @@ const path = require('path');
 
 const { OWNER, TOKEN, PREFIX } = require('./config');
 
+const client = new Commando.Client({
+  owner: OWNER,
+  commandPrefix: PREFIX
+});
+
 client.logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp({
@@ -15,11 +20,6 @@ client.logger = winston.createLogger({
     new winston.transports.Console(),
     new winston.transports.File({ filename: 'wokkibot.log' })
   ]
-});
-
-const client = new Commando.Client({
-  owner: OWNER,
-  commandPrefix: PREFIX
 });
 
 client
