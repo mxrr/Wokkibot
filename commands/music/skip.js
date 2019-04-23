@@ -4,6 +4,7 @@ module.exports = class SkipCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'skip',
+      aliases: ['stop'],
       group: 'music',
       memberName: 'skip',
       description: 'Skip currently playing song',
