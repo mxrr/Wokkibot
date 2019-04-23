@@ -62,3 +62,6 @@ typings/
 
 # Config
 config.json
+
+# Log file
+wokkibot.log
