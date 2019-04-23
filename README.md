@@ -1,4 +1,30 @@
 # Wokkibot
-A JavaScript Discord bot using Discord.js and Commando
+A Discord bot written using DiscordJS and Commando.
 
-I've designed this bot to be used on my own server. I'm not planning on providing any support for this bot, so you're on your own if you decide to use it.
+# Requirements
+- Node.js 10.0.0 or newer is required due to DiscordJS master branch being used
+
+# Installation
+- `git clone https://github.com/Wokkipannu/Wokkibot.git`
+- `cd Wokkibot`
+- `npm install`
+- Create config.json in root with the following
+```
+{
+  "TOKEN": "YOUR-DISCORD-BOT-TOKEN",
+  "OWNER": "YOUR-ACCOUNT-ID",
+  "PREFIX": "?",
+  "GOOGLE_API_KEY": "YOUR-GOOGLE-API-KEY"
+}
+```
+- `npm start`
+
+# Commands
+- (prefix)help - Get command list
+- (prefix)play <url/keyword> - Play a song
+- (prefix)skip - Skip currently playing song
+- (prefix)queue - Display song queue
+- (prefix)remove <id> - Remove specific song from queue
+- (prefix)weather <location> - Get weather for given location
+- (prefix)accountage <@User> - Get date when account was created
+- (prefix)purge <limit> - Delete x messages from channel

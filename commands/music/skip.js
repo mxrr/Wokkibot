@@ -4,7 +4,6 @@ module.exports = class SkipCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'skip',
-      aliases: ['stop'],
       group: 'music',
       memberName: 'skip',
       description: 'Skip currently playing song',
@@ -14,16 +13,20 @@ module.exports = class SkipCommand extends Command {
   }
 
   async run(msg) {
-    const queue = await this.queue.get(msg.guild.id);
-    if (!queue) return msg.channel.send(`Nothing is playing`);
-
-    queue.connection.dispatcher.end('Skipped');
-    return msg.channel.send('Skipped');
+    try {
+      const queue = await this.queue.get(msg.guild.id);
+      if (!queue) return msg.reply('You can not skip nonexistent song');
+      
+      const title = queue.songs[0].title;
+      queue.connection.dispatcher.end('skipped');
+      return msg.channel.send(`${title} was skipped`);
+    }
+    catch(error) {
+      return [console.error('Skip error', error),msg.channel.send('Skip command error')];
+    }
   }
 
   get queue() {
-    if (!this._queue) this._queue = this.client.registry.resolveCommand('music:play').queue;
-
-    return this._queue;
+    return this.client.registry.resolveCommand('music:play').queue;
   }
 }

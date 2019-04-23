@@ -60,10 +60,5 @@ typings/
 # next.js build output
 .next
 
-#
+# Config
 config.json
-package-lock.json
-users.db
-guilds.db
-blacklist.db
-wokkibot.log

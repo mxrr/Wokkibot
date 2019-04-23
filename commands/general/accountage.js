@@ -14,7 +14,7 @@ module.exports = class AccountAgeCommand extends Command {
       args: [
         {
           key: 'user',
-          prompt: 'Whose account age are we checking?',
+          prompt: 'Mention user to check',
           type: 'string',
           default: ''
         }
@@ -22,10 +22,10 @@ module.exports = class AccountAgeCommand extends Command {
     });
   }
 
-  async run(msg, { user }) {
-    user = user ? msg.mentions.users.first(1)[0] : msg.author;
+  run(msg, { user }) {
+    user = user ? msg.mentions.users.first() : msg.author;
 
-    msg.channel.send(`Account **${user.username}** was created at **${moment(user.createdAt).format('DD.MM.YYYY HH:mm:ss')}** which was **${this.numberWithCommas(moment().diff(user.createdAt, 'days'))} days ago**.`);
+    msg.reply(`Account **${user.username}** was created at **${moment(user.createdAt).format('DD.MM.YYYY HH:mm:ss')}** which was **${this.numberWithCommas(moment().diff(user.createdAt, 'days'))} days ago**.`);
   }
 
   numberWithCommas(x) {
