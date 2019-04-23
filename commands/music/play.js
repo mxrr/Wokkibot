@@ -33,13 +33,15 @@ module.exports = class PlayCommand extends Command {
 
     try {
       let video = await this.youtube.getVideo(url);
-      return this.handleVideo(msg, video);
+      this.handleVideo(msg, video);
+      return undefined;
     }
     catch(error) {
       try {
         let videos = await this.youtube.searchVideos(url, 1).catch(() => msg.reply('No results for given keyword'));
         let video = await this.youtube.getVideoByID(videos[0].id);
-        return this.handleVideo(msg, video);
+        this.handleVideo(msg, video);
+        return undefined;
       }
       catch(error) {
         return [this.client.logger.error('Unable to play video', error),msg.reply('Video play failed due to an error')];
