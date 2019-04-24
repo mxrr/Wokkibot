@@ -24,7 +24,7 @@ client.logger = winston.createLogger({
 
 client
   .on('ready', () => {
-    client.logger.info('Wokkibot is ready');
+    client.logger.info(`Logged in as ${client.user.tag}`);
     client.user.setActivity('you', { type: 'WATCHING'} );
   })
   .on('warn', client.logger.error)
