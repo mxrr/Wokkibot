@@ -27,5 +27,7 @@ A Discord bot written using DiscordJS and Commando.
 - (prefix)remove <id> - Remove specific song from queue
 - (prefix)volume <1-100> - Change dispatcher volume
 - (prefix)weather <location> - Get weather for given location
-- (prefix)accountage <@User> - Get date when account was created
+- (prefix)accountage <Optional: @User> - Get date when account was created
 - (prefix)purge <limit> - Delete x messages from channel
+- (prefix)dice <Optional: Times> <Optional: Max> - Roll the dice
+- (prefix)8ball <Question?> - Ask magic 8ball a question
