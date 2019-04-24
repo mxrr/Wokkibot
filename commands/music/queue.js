@@ -23,7 +23,7 @@ module.exports = class QueueCommand extends Command {
         .setTitle('Song queue');
       
       queue.songs.forEach((song, index) => {
-        queueEmbed.addField(`Song ${index + 1}`, `[${song.title}](https://www.youtube.com/watch?v=${song.id})\nDuration: ${this.timeString(queue.songs[0].duration)}\nRequested by ${song.requester}`, false);
+        queueEmbed.addField(`Song ${index + 1} ${index === 0 ? '(Now playing)' : ''}`, `[${song.title}](https://www.youtube.com/watch?v=${song.id})\nDuration: ${this.timeString(queue.songs[index].duration)}\nRequested by ${song.requester}`, false);
       });
 
       return msg.channel.send(queueEmbed);
