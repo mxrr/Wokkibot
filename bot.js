@@ -29,8 +29,6 @@ client
   })
   .on('warn', client.logger.error)
   .on('error', client.logger.warn)
-  .on('disconnect', () => console.log('Disconnected'))
-  .on('reconnect', () => console.log('Reconnected'))
   .on('commandRun', (cmd, promise, msg, args) => client.logger.info(`${msg.author.tag} (${msg.author.id}) ran command ${cmd.groupID}:${cmd.memberName}`))
   .on('commandError', (cmd, err) => client.logger.error(`Error occurred when running command ${cmd.groupID}:${cmd.memberName}`, err));
 
