@@ -28,30 +28,29 @@ module.exports = class PlayCommand extends Command {
   }
 
   async run(msg, { url }) {
-    const voiceChannel = msg.member.voice.channel;
-    if (!voiceChannel) return msg.reply('You must be connected to a voice channel to run this command');
+    const voiceChannel = msg.member.voiceChannel;
+    if (!voiceChannel) return msg.reply('You must connect to a voice channel first');
+  
+    let video;
 
-    try {
-      let video = await this.youtube.getVideo(url);
-      this.handleVideo(msg, video);
-      return undefined;
+    if (url.match(/^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/g)) {
+      video = await this.youtube.getVideo(url);
     }
-    catch(error) {
-      try {
-        let videos = await this.youtube.searchVideos(url, 1).catch(() => msg.reply('No results for given keyword'));
-        let video = await this.youtube.getVideoByID(videos[0].id);
-        this.handleVideo(msg, video);
-        return undefined;
-      }
-      catch(error) {
-        return [this.client.logger.error('Unable to play video', error),msg.reply('Video play failed due to an error')];
-      }
+    else {
+      let videos = await this.youtube.searchVideos(url, 1).catch(() => {
+        this.client.logger.info('No search results for given keyword');
+        msg.reply('No results for given keyword');
+      });
+      video = await this.youtube.getVideoByID(videos[0].id);
     }
+
+    if (video) this.handleVideo(msg, video);
+    else msg.reply('Could not find a video');
+    return undefined;
   }
 
-  handleVideo(msg, video) {
-    const voiceChannel = msg.member.voice.channel;
-    if (!voiceChannel) return msg.reply('You must be connected to a voice channel to run this command');
+  async handleVideo(msg, video) {
+    const voiceChannel = msg.member.voiceChannel;
 
     const queue = this.queue.get(msg.guild.id);
 
@@ -65,55 +64,43 @@ module.exports = class PlayCommand extends Command {
     }
 
     if (!queue) {
-      try {
-        voiceChannel.join()
-          .then(connection => {
-            this.queue.set(msg.guild.id, {
-              voiceChannel: voiceChannel,
-              connection: connection,
-              songs: [song]
-            });
-            this.play(msg);
+      await voiceChannel.join()
+        .then(connection => {
+          this.queue.set(msg.guild.id, {
+            voiceChannel: voiceChannel,
+            connection: connection,
+            songs: [song]
           });
-      }
-      catch(error) {
-        return [this.client.logger.error('Failed to create queue', error),msg.reply('Failed to create queue')];
-      }
+        });
+      this.play(msg);
     }
     else {
-      try {
-        this.client.logger.info(`Adding ${song.title} to queue in ${msg.guild.name} (${msg.guild.id})`);
-        let queueEmbed = new MessageEmbed()
-          .setColor('#1a2b3c')
-          .setTitle('Song added to queue')
-          .setDescription(`[${song.title}](https://www.youtube.com/watch?v=${song.id})\n**Duration:** ${this.timeString(song.duration)}\n**Requested by:** ${msg.author}`)
-          .setImage(song.thumbnail);
-        msg.channel.send(queueEmbed);
-        return queue.songs.push(song);
-      }
-      catch(error) {
-        return [this.client.logger.error('Pushing song to queue failed', error),msg.reply('Could not push song to queue')];
-      }
+      let queueEmbed = new MessageEmbed()
+        .setColor('#1a2b3c')
+        .setTitle('Song added to queue')
+        .setDescription(`[${song.title}](https://www.youtube.com/watch?v=${song.id})\n**Duration:** ${this.timeString(song.duration)}\n**Requested by:** ${msg.author}`)
+        .setImage(song.thumbnail);
+      
+      msg.channel.send(queueEmbed);
+      queue.songs.push(song);
     }
+
+    return undefined;
   }
 
   async play(msg) {
     const queue = this.queue.get(msg.guild.id);
 
     if (queue.songs.length === 0) {
-      msg.channel.send('No more songs in queue');
       queue.voiceChannel.leave();
       return this.queue.delete(msg.guild.id);
     }
 
-    try {
-      const playEmbed = new MessageEmbed()
-        .setColor('#1a2b3c')
-        .setTitle('Now playing')
-        .setDescription(`[${queue.songs[0].title}](https://www.youtube.com/watch?v=${queue.songs[0].id})\n**Duration:** ${this.timeString(queue.songs[0].duration)}\n**Requested by:** ${queue.songs[0].requester}`)
-        .setImage(queue.songs[0].thumbnail);
-
-      this.client.logger.info(`Playing ${queue.songs[0].title} in ${msg.guild.name} (${msg.guild.id})`);
+    const playEmbed = new MessageEmbed()
+      .setColor('#1a2b3c')
+      .setTitle('Now playing')
+      .setDescription(`[${queue.songs[0].title}](https://www.youtube.com/watch?v=${queue.songs[0].id})\n**Duration:** ${this.timeString(queue.songs[0].duration)}\n**Requested by:** ${queue.songs[0].requester}`)
+      .setImage(queue.songs[0].thumbnail);
 
       const dispatcher = await queue.connection.play(await ytdl(queue.songs[0].url), { type: 'opus', volume: 0.2 })
         .on('end', reason => {
@@ -126,12 +113,8 @@ module.exports = class PlayCommand extends Command {
           this.play(msg);
           return this.client.logger.error('Dispatcher error', error);
         });
-
-        msg.channel.send(playEmbed);
-    }
-    catch(error) {
-      return [this.client.logger.error('Play function error', error),msg.channel.send('Playing song failed')];
-    }
+      
+      msg.channel.send(playEmbed);
   }
 
   timeString(seconds, forceHours = false) {
