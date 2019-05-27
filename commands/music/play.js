@@ -28,7 +28,7 @@ module.exports = class PlayCommand extends Command {
   }
 
   async run(msg, { url }) {
-    const voiceChannel = msg.member.voiceChannel;
+    const voiceChannel = msg.member.voice.channel;
     if (!voiceChannel) return msg.reply('You must connect to a voice channel first');
   
     let video;
