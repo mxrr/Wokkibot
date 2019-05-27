@@ -50,7 +50,7 @@ module.exports = class PlayCommand extends Command {
   }
 
   async handleVideo(msg, video) {
-    const voiceChannel = msg.member.voiceChannel;
+    const voiceChannel = msg.member.voice.channel;
 
     const queue = this.queue.get(msg.guild.id);
 
