@@ -1,6 +1,6 @@
 const { Command } = require('discord.js-commando');
 
-module.exports = class DiceCommand extends Command {
+module.exports = class ClassCommand extends Command {
   constructor(client) {
     super(client, {
       name: 'class',
