@@ -12,7 +12,6 @@
   "dependencies": {
     "discord.js": "github:discordjs/discord.js",
     "discord.js-commando": "github:discordjs/commando",
-    "ffmpeg-binaries": "^4.0.0",
     "moment": "^2.24.0",
     "node-opus": "^0.3.1",
     "simple-youtube-api": "^5.1.1",
