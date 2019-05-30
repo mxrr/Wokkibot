@@ -13,7 +13,9 @@ module.exports = class WowCommand extends Command {
   }
 
   run(msg) {
-    const target = new Date('8/27/2019');
+    let target = new Date('8/27/2019');
+    target.setHours(target.getHours() - 2);
+
     const difference = target.getTime() - new Date().getTime();
 
     const days = this.getDays(difference / 1000);
