@@ -16,7 +16,18 @@ module.exports = class WowCommand extends Command {
     const target = new Date('8/27/2019');
     const difference = target.getTime() - new Date().getTime();
 
-    msg.reply(`${this.getDays(difference / 1000)} days, ${this.getHours(difference / 1000)} hours, ${this.getMinutes(difference / 1000)} minutes, ${this.getSeconds(difference / 1000)} seconds until WoW Classic`);
+    const days = this.getDays(difference / 1000);
+    const hours = this.getHours(difference / 1000);
+    const minutes = this.getMinutes(difference / 1000);
+    const seconds = this.getSeconds(difference / 1000);
+
+    let reply = "";
+    reply += days !== 1 ? `${days} days, ` : `${days} day, `;
+    reply += hours !== 1 ? `${hours} hours, ` : `${hours} hour, `;
+    reply += minutes !== 1 ? `${minutes} minutes, ` : `${minutes} minute, `;
+    reply += seconds !== 1 ? `${seconds} seconds` : `${seconds} second`;
+
+    msg.reply(`**${reply}** until WoW Classic`);
   }
 
   getDays(seconds) {
